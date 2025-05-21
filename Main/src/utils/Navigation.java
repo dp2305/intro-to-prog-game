@@ -105,5 +105,3 @@ public class Navigation {
         System.out.println("You are currently at room 320");
     }
 }
-
-

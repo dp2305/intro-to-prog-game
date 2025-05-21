@@ -2,18 +2,14 @@ package utils;
 import java.util.Scanner;
 
 public class Locations {
-    private static Scanner sc = new Scanner(System.in);
+    private static final Scanner sc = new Scanner(System.in);
 
-    private static int currentLocation = 220;
+    private static int currentLocation = 11;
 
     private static final int[][] ROOM_LOCATION = new int [5][5];
 
-    public static void main(String[] args) {
-        map();
-    }
-
     private static void map() {
-        int [] mapLocation = new int[3];
+        int[] mapLocation = new int[3];
         int index = 0;
 
         int num = currentLocation;
