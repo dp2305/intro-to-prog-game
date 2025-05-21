@@ -1,0 +1,7 @@
+    what needs to be done:
+- make the weapons work.
+- figure out how to save where the location of the main character is.
+- figure out how to save the weapon that the player chose in hte beginning
+
+the character location is saved as an int and the int relays the location which has an int attached to it
+like the 'main base will have an int of 1'
