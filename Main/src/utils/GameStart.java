@@ -2,7 +2,7 @@ package utils;
 import java.util.Scanner;
 
 public class GameStart {
-    private static Scanner sc = new Scanner(System.in);
+    private static final Scanner sc = new Scanner(System.in);
     public static String MC;
     public static char weaponChosen;
 

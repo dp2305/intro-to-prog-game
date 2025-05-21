@@ -8,7 +8,6 @@ public class Navigation {
     private static int tempLocation;
     private static boolean gameRunning = true;
 
-
     public static void main(String[] args) {
 
         System.out.println("Welcome to the Nav tutorial!");
@@ -29,31 +28,27 @@ public class Navigation {
         String directionEntered = myImput.nextLine().toLowerCase();
 
         switch (directionEntered) {
-            case "n": {
+            case "n" ->  {
                 currentLocation = currentLocation + 100;
                 goToLocation(currentLocation);
-                break;
             }
-            case "e": {
+            case "e" ->  {
                 currentLocation = currentLocation + 10;
                 goToLocation(currentLocation);
-                break;
             }
-            case "w": {
+            case "w" ->  {
                 currentLocation = currentLocation - 10;
                 goToLocation(currentLocation);
-                break;
             }
-            case "s": {
+            case "s" ->  {
                 currentLocation = currentLocation - 100;
                 goToLocation(currentLocation);
-                break;
             }
-            case "q":
+            case "q" -> {
                 System.out.println("Quitting...");
                 gameRunning = false;
-                break;
-            default: {
+            }
+            default -> {
                 System.out.println("Please enter a valid direction");
             }
         }
@@ -62,24 +57,15 @@ public class Navigation {
     public static void goToLocation(int locationEntered) {
 
         switch (locationEntered) {
-            case 120:
-                room120();
-                break;
-            case 130:
-                room130();
-                break;
-            case 210:
-                room210();
-                break;
-            case 220:
-                room220();
-                break;
-            case 320:
-                room320();
-                break;
-            default:
+            case 120 -> room120();
+            case 130 -> room130();
+            case 210 -> room210();
+            case 220 -> room220();
+            case 320 -> room320();
+            default -> {
                 System.out.println("No path forward this way");
                 currentLocation = tempLocation;
+            }
         }
     }
 

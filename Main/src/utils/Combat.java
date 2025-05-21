@@ -1,23 +1,23 @@
 package utils;
-//This imports what i need
-import java.util.Scanner;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Combat {
 
     public static Scanner sc = new Scanner(System.in);
     private static Random diceroll = new Random();
+
     // Make player and monster static so they are accessible in static methods
     private static GameCharacters pCharacter = new GameCharacters("JohnDoe", "Human", 20);
     private static GameCharacters monster1 = new GameCharacters("Demon", "monster", 10);
     private static boolean life = true;
-    private static boolean gamerunning = true;
+    private static boolean gameRunning = true;
 
     public static void main(String[] args) {
         charCreate();
         do {
             combat(pCharacter, monster1);
-        } while (gamerunning);
+        } while (gameRunning);
     }
 
     public static void charCreate() {
@@ -72,7 +72,7 @@ public class Combat {
                     if (flee) {
                         System.out.println("you have fleed successfully. tutorial will end now ");
                         fighton = false;
-                        gamerunning = false;
+                        gameRunning = false;
                     } else {
                         System.out.println("you failed to flee, the battle continues");
                         monsterAttackroll = diceroll.nextInt(6) + 1;
@@ -96,13 +96,13 @@ public class Combat {
                 life = false;
                 fighton = false;
                 System.out.println("you died, game over");
-                gamerunning = false;
+                gameRunning = false;
                 break;
             }
             if (monster.getHealth() <= 0) {
                 fighton = false;
                 System.out.println("the monster dies, game over");
-                gamerunning = false;
+                gameRunning = false;
                 break;
             }
         }

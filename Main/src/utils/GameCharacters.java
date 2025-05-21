@@ -35,6 +35,7 @@ public class GameCharacters {
         return health;
     }
 
+    @Override
     public String toString() {
         return String.format("--Character info--\nName: %s\nCharType: %s\nHealth: %d", name, charType, health);
     }
