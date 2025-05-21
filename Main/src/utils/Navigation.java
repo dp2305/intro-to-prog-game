@@ -1,11 +1,16 @@
 package utils;
 import java.util.Scanner;
 
+
 public class Navigation {
 
+    // Scanner to get user input from the console
     public static Scanner myImput = new Scanner(System.in);
+    // Current room location (starting at 220)
     private static int currentLocation = 220;
+    // Temporary variable to store location in case of invalid move
     private static int tempLocation;
+    // Controls whether the game is running or not
     private static boolean gameRunning = true;
 
 

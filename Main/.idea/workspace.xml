@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3408d761-09b5-4eaa-b6d2-2cd066a3bb5f" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/utils/Damage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/Game_start.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/GameStart.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/Locations.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/Locations.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/thinking" beforeDir="false" afterPath="$PROJECT_DIR$/thinking" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/Navigation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/Navigation.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +37,7 @@
     "Application.Main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Dutt",
+    "git-widget-placeholder": "main",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/Dutt/Documents/intro-to-prog-game/Main",
