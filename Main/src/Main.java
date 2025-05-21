@@ -1,17 +1,14 @@
 import java.util.Scanner;
 import utils.*;
 
-
 public class Main {
 
-    private static Scanner sc = new Scanner(System.in);
+    private static final Scanner sc = new Scanner(System.in);
     public static char weaponChosen;
     private static GameCharacters playerCharacter = new GameCharacters("Dutt", "Human", 50);
 
 
     public static void main(String[] args) {
-
-
         start();
 
         backgroundInformation();

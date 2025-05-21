@@ -6,8 +6,7 @@ public class Locations {
 
     private static int currentLocation = 220;
 
-    private static final int [] [] ROOM_LOCATION = new int [5][5];
-
+    private static final int[][] ROOM_LOCATION = new int [5][5];
 
     public static void main(String[] args) {
         map();
@@ -19,11 +18,8 @@ public class Locations {
 
         int num = currentLocation;
 
-
         char plocation = 'P'; //Displays the location of the player's current location
-
         char noroom = '-'; // this shows the areas that aren't accessible;
-
         char room = 'O';  //displays when an area can be visited
 
         // run a while loop to break up the current location into individuals digits
@@ -46,7 +42,6 @@ public class Locations {
             for (int j = 1 ; j < 4 ; j++){
                 System.out.print("| ");
 
-
                 //code used to check if the room exitsts as a part of the Room_LOCATIONS array
                 boolean isRoom = false;
                 for (int k = 0; k < ROOM_LOCATION.length; k++) {
@@ -55,7 +50,6 @@ public class Locations {
                         break;
                     }
                 }
-
 
                 //will print player location if the mapLocation indexes match i and j
                 if(mapLocation[2] == i && mapLocation[1] == j){
@@ -68,10 +62,6 @@ public class Locations {
                     System.out.print(noroom);
                 }
                 System.out.print(" |");
-
-
-
-
 
             }
         }

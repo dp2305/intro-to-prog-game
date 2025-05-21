@@ -1,0 +1,22 @@
+### IntelliJ IDEA ###
+.idea/
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+### Java ###
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar
+
+### Test ###
+test.java
