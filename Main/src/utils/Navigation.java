@@ -3,44 +3,42 @@ import java.util.Scanner;
 
 public class Navigation {
 
-    public static Scanner myImput = new Scanner(System.in);
+    public static Scanner sc = new Scanner(System.in);
     private static int currentLocation = 220;
     private static int tempLocation;
     private static boolean gameRunning = true;
 
     public static void main(String[] args) {
-
         System.out.println("Welcome to the Nav tutorial!");
 
         do {
             navigation();
         } while (gameRunning);
-
     }
 
     public static void navigation() {
         tempLocation = currentLocation;
         System.out.println("You are currently at " + currentLocation);
         System.out.println("Which direction would you like to go?");
-        System.out.println("[n]orth, [e]ast, [w]est, [s]outh\n");
+        System.out.println("[N]orth, [E]ast, [W]est, [S]outh");
         System.out.println("Press Q to quit");
         System.out.println("Enter direction: ");
-        String directionEntered = myImput.nextLine().toLowerCase();
+        String directionEntered = sc.nextLine().toLowerCase();
 
         switch (directionEntered) {
-            case "n" ->  {
+            case "n" -> {
                 currentLocation = currentLocation + 100;
                 goToLocation(currentLocation);
             }
-            case "e" ->  {
+            case "e" -> {
                 currentLocation = currentLocation + 10;
                 goToLocation(currentLocation);
             }
-            case "w" ->  {
+            case "w" -> {
                 currentLocation = currentLocation - 10;
                 goToLocation(currentLocation);
             }
-            case "s" ->  {
+            case "s" -> {
                 currentLocation = currentLocation - 100;
                 goToLocation(currentLocation);
             }
@@ -55,7 +53,6 @@ public class Navigation {
     }
 
     public static void goToLocation(int locationEntered) {
-
         switch (locationEntered) {
             case 120 -> room120();
             case 130 -> room130();

@@ -1,50 +1,156 @@
+import java.util.Random;
 import java.util.Scanner;
 import utils.*;
 
 public class Main {
 
-    private static final Scanner sc = new Scanner(System.in);
-    public static char weaponChosen;
-    private static GameCharacters playerCharacter = new GameCharacters("Dutt", "Human", 50);
+    // ANSI codes for color - better readability in the console
+    private static final String ANSI_RESET = "\u001B[0;49m";
+    private static final String ANSI_TEXT_RED = "\u001B[91m";
+    private static final String ANSI_TEXT_GREEN = "\u001B[92m";
+    private static final String ANSI_TEXT_YELLOW = "\u001B[93m";
+    private static final String ANSI_TEXT_BLUE = "\u001B[94m";
 
+    // Scanner and Random objects
+    private static final Scanner sc = new Scanner(System.in);
+    @SuppressWarnings("unused")
+    private static final Random random = new Random();
+
+    // Game variables
+    public static char weaponChosen;
+    @SuppressWarnings("FieldMayBeFinal")
+    private static GameCharacters playerCharacter = new GameCharacters("Player", "Human", 50);
+    private static boolean validChoiceHandler = true;
 
     public static void main(String[] args) {
-        start();
+        startTutorial();
+        startGame();
+        displayBackgroundInformation();
+        missionStart();
 
-        backgroundInformation();
-        MissionStart();
-
-        //this is the intro code that gives the plaver the first choice.
-        System.out.println("you have been dropped of at the main base.");
-        System.out.println("what would you like to do from here");
-        System.out.println("(S)earch \n (L)ook around");
+        // Handle player's choice
+        while (validChoiceHandler) {
+            // This is the intro code that gives the player the first choice
+            print("You have been dropped off at the main base.");
+            lineBreak();
+            print("What would you like to do from here? ");
+            printColour("(S)earch, (L)ook around", ANSI_TEXT_BLUE);
+            lineBreak();
+            printColour(" > ", ANSI_TEXT_GREEN);
+            lineBreak();
+            char choice = sc.next().toUpperCase().charAt(0);
+            switch (choice) {
+                case 'S' -> {
+                    print("You search the area and find some supplies.");
+                    // Add more flavour text here
+                    lineBreak();
+                    validChoiceHandler = false;
+                }
+                case 'L' -> {
+                    print("You look around and see various buildings and military equipment.");
+                    // Add more flavour text here
+                    lineBreak();
+                    validChoiceHandler = false;
+                }
+                default -> {
+                    printColour("Invalid choice. Please try again.", ANSI_TEXT_RED);
+                    lineBreak();
+                }
+            }
+        }
     }
 
-
-    public static String start() {
-        System.out.println("Choose your name warrior: ");
-        String pName = sc.nextLine();
-        playerCharacter.setName(pName);
-        System.out.println("\nBackground information:");
-
-        return "Game Start";
+    public static void startTutorial() {
+        print(ANSI_TEXT_GREEN + "Green" + ANSI_RESET + " means that you must enter your choice, for example:");
+        lineBreak();
+        print(" - " + ANSI_TEXT_GREEN + "Enter your name: " + ANSI_RESET + " name");
+        lineBreak();
+        print(" - " + ANSI_TEXT_GREEN + " > " + ANSI_RESET + "Y");
+        lineBreak();
+        print(ANSI_TEXT_YELLOW + "Yellow" + ANSI_RESET + " is information about the story of the game.");
+        lineBreak();
+        print(ANSI_TEXT_RED + "Red" + ANSI_RESET + " is an error message.");
+        lineBreak();
+        print(ANSI_TEXT_BLUE + "Blue" + ANSI_RESET + " are the choices that you can make.");
+        lineBreak();
     }
 
+    // Method for starting the game
+    public static void startGame() {
+        lineBreak();
+        printColour("      -----== Game Start ==-----", ANSI_TEXT_YELLOW);
+        lineBreak();
+        lineBreak();
+        while (validChoiceHandler) {
+            printColour("Enter your name, warrior: ", ANSI_TEXT_GREEN);
+            String playerName = sc.nextLine();
 
-    public static String backgroundInformation() {
-        System.out.printf("%s you have been chosen for a important reconnaissance mission. \nyou objective is to rescue scientists that were conducting important reseach.",playerCharacter.getName());
-        System.out.println("\nAlong the way you will find other squads which were deployed earlier but failed to finish the task");
-        System.out.println("God Speed soldier.");
-        return "";
+            if (playerName.isEmpty()) {
+                printColour("Invalid name. Please try again.", ANSI_TEXT_RED);
+                lineBreak();
+            } else {
+                print("Are you sure you want to use \"" + ANSI_TEXT_YELLOW + playerName + ANSI_RESET + "\" as your name?" + ANSI_TEXT_BLUE + " (Y)es / (N)o" + ANSI_RESET);
+                lineBreak();
+                printColour(" > ", ANSI_TEXT_GREEN);
+
+                char nameConfirm = sc.next().toUpperCase().charAt(0);
+                sc.nextLine();
+
+                switch (nameConfirm) {
+                    case 'Y' -> {
+                        playerCharacter.setName(playerName);
+                        validChoiceHandler = false;
+                        lineBreak();
+                    }
+                    case 'N' -> {
+                    }
+                    default -> {
+                        printColour("Invalid choice. Please try again.", ANSI_TEXT_RED);
+                        lineBreak();
+                    }
+                }
+            }
+        }
     }
 
-    public static String MissionStart() {
-        System.out.println("\nChoose a weapon to start with");
-        System.out.println("(K)nife, (P)istol, (R)ifle");
-        weaponChosen  = sc.next().charAt(0);
-        System.out.println("you are inside of a helicopter, about to be dropping into the mission area. ");
-        return "";
+    // Method for displaying the background information
+    public static void displayBackgroundInformation() {
+        print(ANSI_TEXT_YELLOW + playerCharacter.getName() + ANSI_RESET + ", you have been chosen for an important reconnaissance mission.\nYour objective is to rescue scientists that were conducting important research.");
+        lineBreak();
+        print("Along the way you will find other squads which were deployed earlier but failed to finish the task");
+        lineBreak();
+        print("Godspeed soldier.");
     }
 
+    // Method for starting the mission
+    public static void missionStart() {
+        print("Choose a weapon to start with: ");
+        printColour("(K)nife, (P)istol, (R)ifle", ANSI_TEXT_BLUE);
+        lineBreak();
+        print("The knife is the most basic weapon, it has" + ANSI_TEXT_YELLOW + " low damage and range" + ANSI_RESET + " but its" + ANSI_TEXT_YELLOW + " the lightest, making it agile." + ANSI_RESET + ".");
+        lineBreak();
+        print("The pistol has a larger range with a moderate damage output, but, its heavier than the knife and doesn't come with any ammo.");
+        lineBreak();
+        print("The rifle is a" + ANSI_TEXT_YELLOW + " long range weapon with a high damage output" + ANSI_RESET + " but it is" + ANSI_TEXT_YELLOW + " heavy and difficult to handle" + ANSI_RESET + ".");
+        lineBreak();
+        printColour(" > ", ANSI_TEXT_GREEN);
+        weaponChosen = sc.next().toUpperCase().charAt(0);
+        print("You are inside of a helicopter, about to be dropping into the mission area.");
+    }
 
+    // Printing methods created to simplify coding and reading text-heavy sections of code
+    // Method to print text
+    public static void print(String text) {
+        System.out.print(text);
+    }
+
+    // Method to print colourful text
+    public static void printColour(String text, String colour) {
+        System.out.print(colour + text + ANSI_RESET);
+    }
+
+    // Method to print a line break
+    public static void lineBreak() {
+        System.out.println();
+    }
 }
