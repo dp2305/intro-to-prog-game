@@ -14,8 +14,8 @@ public class Main {
 
         start();
 
-        //backgroundInformation();
-        //MissionStart();
+        backgroundInformation();
+        MissionStart();
 
         //this is the intro code that gives the plaver the first choice.
         System.out.println("you have been dropped of at the main base.");
