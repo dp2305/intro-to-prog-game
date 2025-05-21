@@ -1,10 +1,16 @@
 package utils;
 import java.util.Scanner;
-public class Game_start {
-    static Scanner sc = new Scanner(System.in);
+
+public class GameStart {
+    private static Scanner sc = new Scanner(System.in);
     public static String MC;
     public static char weaponChosen;
-    public static String GameStart() {
+
+    public GameStart(){
+        start();
+    }
+
+    public static String start() {
         System.out.println("Choose your name warrior: ");
         MC = sc.nextLine();
         System.out.println("\nBackground information:");

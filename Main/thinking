@@ -1,9 +1,17 @@
     what needs to be done:
 - make the weapons work.
 - figure out how to save where the location of the main character is.
+- making the map work with the
 - figure out how to save the weapon that the player chose in hte beginning
 - make enemies.
 - make the random generator for (damage dealt, damage retrieved, health retrieved from medication.)
+-
+
+
+    what we have done right now
+- combat
+- being able to create the main character's name
+- map
 
 the character location is saved as an int and the int relays the location which has an int attached to it
 like the 'main base will have an int of 1'
