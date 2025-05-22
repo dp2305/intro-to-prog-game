@@ -1,107 +1,141 @@
 package utils;
 import java.util.Scanner;
 
-
 public class Navigation {
 
-    // Scanner to get user input from the console
-    public static Scanner myImput = new Scanner(System.in);
-    // Current room location (starting at 220)
-    private static int currentLocation = 220;
-    // Temporary variable to store location in case of invalid move
-    private static int tempLocation;
-    // Controls whether the game is running or not
-    private static boolean gameRunning = true;
+    // ANSI codes for color - better readability in the console
+    private static final String ANSI_RESET = "\u001B[0;49m";
+    private static final String ANSI_TEXT_RED = "\u001B[91m";
+    private static final String ANSI_TEXT_GREEN = "\u001B[92m";
+    private static final String ANSI_TEXT_YELLOW = "\u001B[93m";
+    private static final String ANSI_TEXT_BLUE = "\u001B[94m";
 
-    public static void main(String[] args) {
+    private static final Scanner sc = new Scanner(System.in);
 
-        System.out.println("Welcome to the Nav tutorial!");
+    // Player's current location and coordinates
+    private static int currentLocation = 00;
+    private static int playerX, playerY;
 
-        // Main game loop: runs while the game is active
-        do {
-            // Handle player navigation
-            navigation();
-        } while (gameRunning);
+    // Location names
+    private static final String[] locationNames = {
+        "Main Base",       "Main Base",       "River",      "Abandoned Lab",  "Abandoned Lab",
+        "Main Base",       "Forest",          "River",      "Forest",         "Forest",
+        "Forest",          "Forest",          "River",      "River",          "Abandoned Camp",
+        "Forest",          "Forest",          "Mountains",  "River",          "Mountains",
+        "Abandoned Camp",  "Abandoned Camp",  "Mountains",  "Mountains",      "Mountains"
+    };
 
-    }
+    public static void navigate() {
+        int errorCount = 0;
+        boolean validChoiceHandler = true;
 
-    // Handles the navigation logic and user input
-    public static void navigation() {
-        // Save current location in case of invalid move
-        tempLocation = currentLocation;
-        // Display current location and direction options
-        System.out.println("You are currently at " + currentLocation);
-        System.out.println("Which direction would you like to go?");
-        System.out.println("[n]orth, [e]ast, [w]est, [s]outh\n");
-        System.out.println("Press Q to quit");
-        System.out.println("Enter direction: ");
-        // Get and normalise user input
-        String directionEntered = myImput.nextLine().toLowerCase();
+        while (validChoiceHandler) {
+            boolean incorrectInput = false;
 
-        // Adjust location based on direction entered
-        switch (directionEntered) {
-            case "n" ->  {
-                currentLocation = currentLocation + 100;
-                goToLocation(currentLocation);
+            // Print the map before user input
+            map();
+
+            // Calculate the relative index of the player's location
+            int characterLocationIndex = playerX * 5 + playerY;
+
+            // Print the current location and player options
+            System.out.println("You are currently in the " + ANSI_TEXT_YELLOW + locationNames[characterLocationIndex] + ANSI_RESET + ", where do you want to go? "+ ANSI_TEXT_BLUE + "\n('W' - Up, 'A' - Left, 'S' - Down, 'D' - Right, 'Q' - Go Back)" + ANSI_RESET);
+
+            // Get the player's movement direction
+            System.out.print(ANSI_TEXT_GREEN + " > " + ANSI_RESET);
+            char movementDirection = sc.next().toUpperCase().charAt(0);
+
+            // Move the player or take them back to the player options
+            // If the player is at the edge of the map, set incorrectInput to true
+            switch (movementDirection) {
+                case 'W' -> {
+                    if (playerX == 0) {
+                        incorrectInput = true;
+                    } else {
+                        currentLocation -= 10;
+                        validChoiceHandler = false;
+                    }
+                }
+                case 'A' -> {
+                    if (playerY == 0) {
+                        incorrectInput = true;
+                    } else {
+                        currentLocation -= 1;
+                        validChoiceHandler = false;
+                    }
+                }
+                case 'S' -> {
+                    if (playerX == 4) {
+                        incorrectInput = true;
+                    } else {
+                        currentLocation += 10;
+                        validChoiceHandler = false;
+                    }
+                }
+                case 'D' -> {
+                    if (playerY == 4) {
+                        incorrectInput = true;
+                    } else {
+                        currentLocation += 1;
+                        validChoiceHandler = false;
+                    }
+                }
+                case 'Q' -> {
+                    System.out.println("[go back to main menu]");
+                    validChoiceHandler = false;
+                }
+                default -> {
+                    for (int i = 0; i < 14; i++) {
+                        System.out.print("\033[1A\033[2K");
+                    }
+                    System.out.println(ANSI_TEXT_RED + "Invalid input, please try again." + ANSI_RESET);
+                    errorCount++;
+                    continue;
+                }
             }
-            case "e" ->  {
-                currentLocation = currentLocation + 10;
-                goToLocation(currentLocation);
+
+            // Delete the previous map and print the error message
+            if (incorrectInput) {
+                for (int i = 0; i < 14; i++) {
+                    System.out.print("\033[1A\033[2K");
+                }
+                System.out.println(ANSI_TEXT_RED + "You can't go that way, try again." + ANSI_RESET);
+                errorCount++;
+                continue;
             }
-            case "w" ->  {
-                currentLocation = currentLocation - 10;
-                goToLocation(currentLocation);
+
+            // Remove the previous map and print the updated map
+            for (int i = 0; i < 14 + errorCount; i++) {
+                System.out.print("\033[1A\033[2K");
             }
-            case "s" ->  {
-                currentLocation = currentLocation - 100;
-                goToLocation(currentLocation);
-            }
-            // Quit the game
-            case "q" -> {
-                System.out.println("Quitting...");
-                gameRunning = false;
-            }
-            // Handle invalid input
-            default -> {
-                System.out.println("Please enter a valid direction");
-            }
+
+            map();
+
+            // Print the player's new location
+            System.out.println("You are now in the " + ANSI_TEXT_YELLOW + locationNames[characterLocationIndex] + ANSI_RESET + ".");
         }
     }
-    // Checks if the new location is valid and calls the corresponding room method
-    public static void goToLocation(int locationEntered) {
 
-        switch (locationEntered) {
-            case 120 -> room120();
-            case 130 -> room130();
-            case 210 -> room210();
-            case 220 -> room220();
-            case 320 -> room320();
-            default -> {
-                // If location is invalid, restore previous location
-                System.out.println("No path forward this way");
-                currentLocation = tempLocation;
+    private static void map() {
+        // Calculate player's current location
+        playerX = currentLocation / 10;
+        playerY = currentLocation % 10;
+
+        // Print the map
+        for (int i = 0; i < 5; i++) {
+            System.out.println("+---+---+---+---+---+");
+            for (int j = 0; j < 5; j++) {
+                System.out.print("| ");
+                if (playerX == i && playerY == j) {
+                    System.out.print(ANSI_TEXT_GREEN + "P " + ANSI_RESET); // Player's current location
+                } else if ((playerX == i && (playerY == j - 1 || playerY == j + 1)) || (playerY == j && (playerX == i - 1 || playerX == i + 1))) {
+                    System.out.print(ANSI_TEXT_YELLOW + "O " + ANSI_RESET); // Travelable locations
+                } else {
+                    System.out.print(ANSI_TEXT_RED + "- " + ANSI_RESET); // Non-travelable locations
+                }
             }
+            System.out.println("|");
         }
-    }
-
-    // Displays message for each room
-    public static void room120() {
-        System.out.println("You are currently at room 120");
-    }
-
-    public static void room130() {
-        System.out.println("You are currently at room 130");
-    }
-
-    public static void room210() {
-        System.out.println("You are currently at room 210");
-    }
-
-    public static void room220() {
-        System.out.println("You are currently at room 220");
-    }
-
-    public static void room320() {
-        System.out.println("You are currently at room 320");
+        System.out.println("+---+---+---+---+---+");
     }
 }
