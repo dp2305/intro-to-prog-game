@@ -1,11 +1,13 @@
 package utils;
 
 public class Weapons {
+    // Fields representing properties of the weapon
     private String name;
     private int damage;
     private int range;
     private int weight;
 
+    // Constructor to initialize a new weapon with all its attributes.
     public Weapons(String name, int damage, int range, int weight) {
         this.name = name;
         this.damage = damage;
@@ -13,6 +15,7 @@ public class Weapons {
         this.weight = weight;
     }
 
+    // Gets
     public String getName() {
         return name;
     }
@@ -28,6 +31,8 @@ public class Weapons {
     public int getWeight() {
         return weight;
     }
+
+    // Sets
 
     public void setName(String name) {
         this.name = name;

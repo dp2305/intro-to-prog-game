@@ -1,15 +1,19 @@
 package utils;
 
+// Private fields to store character information
 public class GameCharacters {
     private String name;
     private String charType;
     private int health;
 
+    // Constructor to initialize a new GameCharacters object.
     public GameCharacters(String name, String charType, int health) {
         this.name = name;
         this.charType = charType;
         this.health = health;
     }
+
+    //Sets
 
     public void setName(String name) {
         this.name = name;
@@ -23,6 +27,8 @@ public class GameCharacters {
         this.health = health;
     }
 
+    //Gets
+
     public String getName() {
         return name;
     }
@@ -34,6 +40,8 @@ public class GameCharacters {
     public int getHealth() {
         return health;
     }
+
+    // Returns a string representation of the character's information
 
     @Override
     public String toString() {
