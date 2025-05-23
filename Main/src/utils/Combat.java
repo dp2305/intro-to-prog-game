@@ -5,147 +5,134 @@ import java.util.Scanner;
 public class Combat {
 
     public static Scanner sc = new Scanner(System.in);
-    private static Random diceroll = new Random();
+    private static Random diceRoll = new Random();
 
     // Make player and monster static so they are accessible in static methods
-    private static GameCharacters pCharacter = new GameCharacters("JohnDoe", "Human", 20);
-    private static GameCharacters monster1 = new GameCharacters("Demon", "monster", 10);
-    private static boolean life = true;
-    private static boolean gameRunning = true;
+    private static Player player = new Player();
+    private static Enemy enemy = new Enemy();
+    private static boolean alive = true;
 
-    public static void main(String[] args) {
-        charCreate();
-        do {
-            combat(pCharacter, monster1);
-        } while (gameRunning);
+    public static void copyPlayer(Player tempPlayer) {
+        player.setName(tempPlayer.getName());
+        player.setHealth(tempPlayer.getHealth());
+        player.setWeapon(tempPlayer.getWeapon());
     }
 
-    public static void charCreate() {
-        System.out.println("-- Player Character Creation --");
-        System.out.println("Please enter your name: ");
-        String pname = sc.nextLine();
-        pCharacter.setName(pname);
-        System.out.println(pCharacter);
-    }
+    public static void combat() {
+        int enemySelection = diceRoll.nextInt(2);
+        int weaponSelection = diceRoll.nextInt(3);
 
-    public static void combat(GameCharacters human, GameCharacters monster) {
-        int temphumanhealth, tempmonsterhealth;
-        int humanAttackroll, monsterAttackroll;
-        boolean fighton = true;
-        boolean flee = false;
+        // Player Weapons
+        Weapon[] playerWeapons = {
+            new Weapon("Dagger", 3, 1000000, 1, 1),
+            new Weapon("Pistol", 6, 0, 2, 2),
+            new Weapon("Rifle", 15, 12, 3, 3)
+        };
 
-        while (fighton) {
-            System.out.println("Human Health left: " + human.getHealth());
-            System.out.println("\nwhat would you like to do?");
+        // Enemies
+        Enemy[] enemies = {
+            new Enemy("Wolf", 10, 3),
+            new Enemy("Bear", 20, 6)
+        };
+
+        // Wolf Attacks
+        Weapon[] wolfWeapons = {
+            new Weapon("Headbutt", 2, 1000000, 2, 1),
+            new Weapon("Claws", 3, 1000000, 1, 1),
+            new Weapon("Bite", 4, 1000000, 2, 1)
+        };
+
+        // Bear Attacks
+        Weapon[] bearWeapons = {
+            new Weapon("Punch", 4, 1000000,2, 1),
+            new Weapon("Kick", 5, 1000000, 2, 1),
+            new Weapon("Crush", 6, 1000000, 1, 1)
+        };
+
+        // Enemy Weapons
+        Weapon[] enemyWeapons = {
+            wolfWeapons[weaponSelection],
+            bearWeapons[weaponSelection]
+        };
+
+        // Set Enemy and Weapon
+        enemy = enemies[enemySelection];
+        enemy.setWeapon(enemyWeapons[weaponSelection]);
+
+
+        int tempPlayerHealth, tempEnemyHealth;
+        int playerAttackRoll, enemyAttackRoll;
+        boolean continueFighting = true;
+        boolean fleeFighting;
+
+        while (continueFighting) {
+            System.out.println("Player Health left: " + player.getHealth());
+            System.out.println("\nWhat would you like to do?");
             System.out.println("[f]ight\n[r]un");
             String choice = sc.nextLine().toLowerCase();
 
             switch (choice) {
-                case "f":
+                case "f" -> {
                     // human attack
-                    System.out.printf("you attempted to hit %s\n", monster.getName());
-                    humanAttackroll = diceroll.nextInt(6) + 1; // 1-6 instead of 0-5
-                    if (humanAttackroll <= 1) {
-                        System.out.printf("you failed to hit %s\n", monster.getName());
+                    System.out.printf("you attempted to hit %s with your %s\n", enemy.getName(), player.getWeapon().getName());
+                    playerAttackRoll = diceRoll.nextInt(6) + 1; // 1-6 instead of 0-5
+                    int playerDamage = playerAttackRoll + player.getWeapon().getDamage(); // weapon damage
+                    if (playerAttackRoll <= 1) {
+                        System.out.printf("you failed to hit %s\n", enemy.getName());
                     } else {
-                        System.out.printf("\nyou hit %s for %d\n", monster.getName(), humanAttackroll);
-                        tempmonsterhealth = monster.getHealth() - humanAttackroll;
-                        monster.setHealth(tempmonsterhealth);
+                        System.out.printf("\nyou hit %s for %d\n", enemy.getName(), playerDamage);
+                        tempEnemyHealth = enemy.getHealth() - playerDamage;
+                        enemy.setHealth(tempEnemyHealth);
                     }
 
-                    if (monster.getHealth() > 0) {
-                        monsterAttackroll = diceroll.nextInt(6) + 1;
-                        System.out.printf("\n%s has %d health left\n", monster.getName(), monster.getHealth());
-                        System.out.printf("the monster attempted to hit %s\n", human.getName());
-                        if (monsterAttackroll <= 1) {
-                            System.out.printf("%s failed to hit %s\n", monster.getName(), human.getName());
+                    if (enemy.getHealth() > 0) {
+                        System.out.printf("\n%s has %d health left\n", enemy.getName(), enemy.getHealth());
+                        System.out.printf("the monster attempted to hit %s with its %s\n", player.getName(), enemy.getWeapon().getName());
+                        enemyAttackRoll = diceRoll.nextInt(6) + 1;
+                        int enemyDamage = enemyAttackRoll + enemy.getWeapon().getDamage();
+                        if (enemyAttackRoll <= 1) {
+                            System.out.printf("%s failed to hit %s\n", enemy.getName(), player.getName());
                         } else {
-                            System.out.printf("you get hit for %d\n", monsterAttackroll);
-                            temphumanhealth = human.getHealth() - monsterAttackroll;
-                            human.setHealth(temphumanhealth);
+                            System.out.printf("you get hit for %d\n", enemyDamage);
+                            tempPlayerHealth = player.getHealth() - enemyDamage;
+                            player.setHealth(tempPlayerHealth);
                         }
                     }
-                    break;
+                }
 
-                case "r":
-                    flee = diceroll.nextBoolean();
-                    if (flee) {
+                case "r" -> {
+                    fleeFighting = diceRoll.nextBoolean();
+                    if (fleeFighting) {
                         System.out.println("you have fleed successfully. tutorial will end now ");
-                        fighton = false;
-                        gameRunning = false;
+                        continueFighting = false;
                     } else {
                         System.out.println("you failed to flee, the battle continues");
-                        monsterAttackroll = diceroll.nextInt(6) + 1;
-                        System.out.printf("%s has %d health left\n", monster.getName(), monster.getHealth());
-                        System.out.printf("the monster attempted to hit %s\n", human.getName());
-                        if (monsterAttackroll <= 1) {
-                            System.out.printf("%s failed to hit %s\n", monster.getName(), human.getName());
+                        enemyAttackRoll = diceRoll.nextInt(6) + 1;
+                        System.out.printf("%s has %d health left\n", enemy.getName(), enemy.getHealth());
+                        System.out.printf("the monster attempted to hit %s\n", player.getName());
+                        if (enemyAttackRoll <= 1) {
+                            System.out.printf("%s failed to hit %s\n", enemy.getName(), player.getName());
                         } else {
-                            System.out.printf("you get hit for %d\n", monsterAttackroll);
-                            temphumanhealth = human.getHealth() - monsterAttackroll;
-                            human.setHealth(temphumanhealth);
+                            System.out.printf("you get hit for %d\n", enemyAttackRoll);
+                            tempPlayerHealth = player.getHealth() - enemyAttackRoll;
+                            player.setHealth(tempPlayerHealth);
                         }
                     }
-                    break;
+                }
 
-                default:
-                    System.out.println("Invalid choice");
-                    break;
+                default -> System.out.println("Invalid choice");
             }
-            if (human.getHealth() <= 0) {
-                life = false;
-                fighton = false;
-                System.out.println("you died, game over");
-                gameRunning = false;
+            if (player.getHealth() <= 0) {
+                alive = false;
+                continueFighting = false;
+                System.out.println("You failed your mission, game over.");
                 break;
             }
-            if (monster.getHealth() <= 0) {
-                fighton = false;
-                System.out.println("the monster dies, game over");
-                gameRunning = false;
+            if (enemy.getHealth() <= 0) {
+                continueFighting = false;
+                System.out.println("You have defeated the enemy, continue your mission.");
                 break;
             }
-        }
-    }
-
-    // Move GameCharacters to its own file in real projects, but keep it static here for this example
-    public static class GameCharacters {
-        private String name;
-        private String charType;
-        private int health;
-
-        public GameCharacters(String name, String charType, int health) {
-            this.name = name;
-            this.charType = charType;
-            this.health = health;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public void setCharType(String charType) {
-            this.charType = charType;
-        }
-
-        public void setHealth(int health) {
-            this.health = health;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getCharType() {
-            return charType;
-        }
-
-        public int getHealth() {
-            return health;
-        }
-
-        public String toString() {
-            return String.format("--Character info--\nName: %s\nCharType: %s\nHealth: %d", name, charType, health);
         }
     }
 }
