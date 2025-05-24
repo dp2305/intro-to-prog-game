@@ -175,7 +175,7 @@ public class Main {
                 }
                 default -> {
                     for (int i = 0; i < 5; i++) {
-                        System.out.print("\033[1A\033[2K");
+                        print("\033[1A\033[2K");
                     }
                     printColour("Invalid choice. Please try again.", ANSI_TEXT_RED);
                     lineBreak();
@@ -190,6 +190,11 @@ public class Main {
         lineBreak();
 
         print("You are inside of a helicopter, about to be dropping into the mission area.");
+    }
+
+    public static void mission1() {
+        lineBreak();
+        print("you were dropped in to the closest military base around");
     }
 
     // Printing methods created to simplify coding and reading text-heavy sections of code
