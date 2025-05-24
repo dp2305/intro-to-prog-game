@@ -132,11 +132,11 @@ public class Main {
         print("Choose a weapon to start with: ");
         printColour("(K)nife, (P)istol, (R)ifle", ANSI_TEXT_BLUE);
         lineBreak();
-        print("The knife is the most basic weapon, it has" + ANSI_TEXT_YELLOW + " low damage and range" + ANSI_RESET + " but its" + ANSI_TEXT_YELLOW + " the lightest, making it agile." + ANSI_RESET + ".");
+        print("The " + ANSI_TEXT_BLUE + "Knife" + ANSI_RESET + " is the most basic weapon, it has" + ANSI_TEXT_YELLOW + " low damage and range" + ANSI_RESET + " but its" + ANSI_TEXT_YELLOW + " the lightest, making it agile." + ANSI_RESET + "." + "\n");
         lineBreak();
-        print("The pistol has a larger range with a moderate damage output, but, its heavier than the knife and doesn't come with any ammo.");
+        print("The " +ANSI_TEXT_BLUE +  "Pistol" +ANSI_RESET + " has a larger range with a moderate damage output, but, its heavier than the knife and doesn't come with any ammo."+ "\n");
         lineBreak();
-        print("The rifle is a" + ANSI_TEXT_YELLOW + " long range weapon with a high damage output" + ANSI_RESET + " but it is" + ANSI_TEXT_YELLOW + " heavy and difficult to handle" + ANSI_RESET + ".");
+        print("The " +ANSI_TEXT_BLUE+ "Rifle" +ANSI_RESET + " is a" + ANSI_TEXT_YELLOW + " long range weapon with a high damage output" + ANSI_RESET + " but it is" + ANSI_TEXT_YELLOW + " heavy and difficult to handle" + ANSI_RESET + "."+ "\n");
         lineBreak();
         while (validChoiceHandler) {
             printColour(" > ", ANSI_TEXT_GREEN);
