@@ -193,8 +193,14 @@ public class Main {
     }
 
     public static void mission1() {
+        validChoiceHandler = true;
+
         lineBreak();
-        print("you were dropped in to the closest military base around");
+        print("you are being dropped off at the closed military base to the mission area.");
+        print("you are dropped off on the heli-pad");
+        print("what would you like to do from here?");
+        lineBreak();
+        printColour("(S)earch, (L)ook around, (M)ap", ANSI_TEXT_BLUE);
     }
 
     // Printing methods created to simplify coding and reading text-heavy sections of code
