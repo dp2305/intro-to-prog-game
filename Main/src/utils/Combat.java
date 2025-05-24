@@ -24,7 +24,7 @@ public class Combat {
 
         // Player Weapons
         Weapon[] playerWeapons = {
-            new Weapon("Dagger", 3, 1000000, 1, 1),
+            new Weapon("", 3, 1000000, 1, 1),
             new Weapon("Pistol", 6, 0, 2, 2),
             new Weapon("Rifle", 15, 12, 3, 3)
         };

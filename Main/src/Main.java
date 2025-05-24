@@ -192,6 +192,11 @@ public class Main {
         print("You are inside of a helicopter, about to be dropping into the mission area.");
     }
 
+    public static void mission1() {
+        lineBreak();
+        print("you were dropped in to a military base:");
+    }
+
     // Printing methods created to simplify coding and reading text-heavy sections of code
     // Method to print text
     public static void print(String text) {
