@@ -1,9 +1,12 @@
 package utils;
+import java.util.ArrayList;
 
 public class Player {
     private String name;
     private int health;
     private Weapon weapon;
+    // Use an arraylist to handle items in the backpack
+    private ArrayList<Items> backpack = new ArrayList<>();
 
     public Player(String name, int health) {
         this.name = name;
@@ -11,7 +14,21 @@ public class Player {
     }
 
     public Player() {
-   }
+    }
+
+    public void showBackpack() {
+        for (Items item : backpack) {
+            System.out.println(item);
+        }
+    }
+
+    public void addBackpackItem(Items item) {
+        backpack.add(item);
+    }
+
+    public void removeBackpackItem(Items item) {
+        backpack.remove(item);
+    }
 
     public void setName(String name) {
         this.name = name;

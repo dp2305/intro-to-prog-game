@@ -8,55 +8,99 @@ public class Combat {
     private static Random diceRoll = new Random();
 
     // Make player and monster static so they are accessible in static methods
-    private static Player player = new Player();
-    private static Enemy enemy = new Enemy();
     private static boolean alive = true;
 
-    public static void copyPlayer(Player tempPlayer) {
-        player.setName(tempPlayer.getName());
-        player.setHealth(tempPlayer.getHealth());
-        player.setWeapon(tempPlayer.getWeapon());
-    }
-
-    public static void combat() {
-        int enemySelection = diceRoll.nextInt(2);
+    public static void combat(Player player, boolean gameRunning) {
+        int enemySelection = diceRoll.nextInt(8);
         int weaponSelection = diceRoll.nextInt(3);
 
-        // Player Weapons
-        Weapon[] playerWeapons = {
-            new Weapon("", 3, 1000000, 1, 1),
-            new Weapon("Pistol", 6, 0, 2, 2),
-            new Weapon("Rifle", 15, 12, 3, 3)
-        };
+        final int MAX_AMMO = 1000000;
 
         // Enemies
         Enemy[] enemies = {
-            new Enemy("Wolf", 10, 3),
-            new Enemy("Bear", 20, 6)
+            new Enemy("Snake",            5, 1),
+            new Enemy("Raven",            5, 2),
+            new Enemy("Vulture",          5, 3),
+            new Enemy("Wolf",             10, 3),
+            new Enemy("Wild Boar",        15, 5),
+            new Enemy("Bear",             20, 8),
+            new Enemy("Sabretooth Tiger", 20, 10),
+            new Enemy("Gorilla",          25, 15)
+        };
+
+        // Enemy Attacks
+        // Snake Attacks
+        Weapon[] snakeWeapons = {
+            new Weapon("Bite", 2, MAX_AMMO, 2, 1),
+            new Weapon("Coil", 3, MAX_AMMO, 1, 1),
+            new Weapon("Poison", 4, MAX_AMMO, 1, 1)
+        };
+
+        // Raven Attacks
+        Weapon[] ravenWeapons = {
+            new Weapon("Beak", 2, MAX_AMMO, 1, 1),
+            new Weapon("Charge", 2, MAX_AMMO, 2, 1),
+            new Weapon("Talons", 4, MAX_AMMO, 1, 1)
+        };
+
+        // Vulture Attacks
+        Weapon[] vultureWeapons = {
+            new Weapon("Beak", 3, MAX_AMMO, 2, 1),
+            new Weapon("Charge", 3, MAX_AMMO, 2, 1),
+            new Weapon("Talons", 5, MAX_AMMO, 1, 1)
         };
 
         // Wolf Attacks
         Weapon[] wolfWeapons = {
-            new Weapon("Headbutt", 2, 1000000, 2, 1),
-            new Weapon("Claws", 3, 1000000, 1, 1),
-            new Weapon("Bite", 4, 1000000, 2, 1)
+            new Weapon("Headbutt", 2, MAX_AMMO, 2, 1),
+            new Weapon("Claws", 3, MAX_AMMO, 1, 1),
+            new Weapon("Bite", 4, MAX_AMMO, 1, 1)
+        };
+
+        // Wild Boar Attacks
+        Weapon[] wildBoarWeapons = {
+            new Weapon("Kick", 4, MAX_AMMO, 2, 1),
+            new Weapon("Charge", 5, MAX_AMMO, 2, 1),
+            new Weapon("Ram", 6, MAX_AMMO, 1, 1)
         };
 
         // Bear Attacks
         Weapon[] bearWeapons = {
-            new Weapon("Punch", 4, 1000000,2, 1),
-            new Weapon("Kick", 5, 1000000, 2, 1),
-            new Weapon("Crush", 6, 1000000, 1, 1)
+            new Weapon("Punch", 4, MAX_AMMO,2, 1),
+            new Weapon("Kick", 5, MAX_AMMO, 2, 1),
+            new Weapon("Hug", 6, MAX_AMMO, 1, 1)
         };
 
-        // Enemy Weapons
+        // Sabretooth Tiger Attacks
+        Weapon[] sabretoothTigerWeapons = {
+            new Weapon("Headbutt", 4, MAX_AMMO, 2, 1),
+            new Weapon("Bite", 5, MAX_AMMO, 2, 1),
+            new Weapon("Claws", 7, MAX_AMMO, 1, 1)
+        };
+
+        // Gorilla Attacks
+        Weapon[] gorillaWeapons = {
+            new Weapon("Punch", 5, MAX_AMMO, 2, 1),
+            new Weapon("Kick", 6, MAX_AMMO, 2, 1),
+            new Weapon("Hug", 7, MAX_AMMO, 1, 1)
+        };
+
+        // All enemy weapons
         Weapon[] enemyWeapons = {
+            snakeWeapons[weaponSelection],
+            ravenWeapons[weaponSelection],
+            vultureWeapons[weaponSelection],
             wolfWeapons[weaponSelection],
-            bearWeapons[weaponSelection]
+            wildBoarWeapons[weaponSelection],
+            bearWeapons[weaponSelection],
+            sabretoothTigerWeapons[weaponSelection],
+            gorillaWeapons[weaponSelection]
         };
 
         // Set Enemy and Weapon
-        enemy = enemies[enemySelection];
+        Enemy enemy = enemies[enemySelection];
+
+        // Enemy weapons need to be set every fight
         enemy.setWeapon(enemyWeapons[weaponSelection]);
 
 
@@ -69,10 +113,10 @@ public class Combat {
             System.out.println("Player Health left: " + player.getHealth());
             System.out.println("\nWhat would you like to do?");
             System.out.println("[f]ight\n[r]un");
-            String choice = sc.nextLine().toLowerCase();
+            char choice = sc.nextLine().toUpperCase().charAt(0);
 
             switch (choice) {
-                case "f" -> {
+                case 'F' -> {
                     // human attack
                     System.out.printf("you attempted to hit %s with your %s\n", enemy.getName(), player.getWeapon().getName());
                     playerAttackRoll = diceRoll.nextInt(6) + 1; // 1-6 instead of 0-5
@@ -100,7 +144,7 @@ public class Combat {
                     }
                 }
 
-                case "r" -> {
+                case 'R' -> {
                     fleeFighting = diceRoll.nextBoolean();
                     if (fleeFighting) {
                         System.out.println("you have fleed successfully. tutorial will end now ");
@@ -119,19 +163,17 @@ public class Combat {
                         }
                     }
                 }
-
                 default -> System.out.println("Invalid choice");
             }
             if (player.getHealth() <= 0) {
                 alive = false;
                 continueFighting = false;
                 System.out.println("You failed your mission, game over.");
-                break;
+                gameRunning = false;
             }
             if (enemy.getHealth() <= 0) {
                 continueFighting = false;
                 System.out.println("You have defeated the enemy, continue your mission.");
-                break;
             }
         }
     }
