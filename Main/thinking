@@ -1,19 +1,40 @@
     what needs to be done:
-- make the weapons work.
-- figure out how to save the weapon that the player chose in the beginning
-- make the random generator for (damage dealt, damage retrieved, health retrieved from medication.)
-- set up enemy encounters (random generator)
-- work on story
-- decide on if (S)earch, (L)ook around, (M)ap as the basic options is fine
+    - make the weapons work.
+    - figure out how to save the weapon that the player chose in the beginning
+    - make the random generator for (damage dealt, damage retrieved, health retrieved from medication.)
+    - set up enemy encounters (random generator)
+    - work on story
+
+what we have done right now:
+    - combat
+    - being able to create the main character's name
+    - figure out how to save where the location of the main character is.
+    - making the map work with the
+    - make enemies.
+    - adYd an NPC (done but not sure where to place it in main + if there are faulty parts)
+    - decide on (1) Use item, (2) Move, (3) View Map, (4) Search, (5) Rest, (6) Check Character as options.
+
+what we need to do to get full marks:
+    - work on bug report (minimum of 10 bugs to get full marks)
+    - need to work on javadocs
+    - need at least 10 appropriate comments
+    - we need 4 or more datatypes inside of the code
+    - on the map we need add a key
+    - if there is a requirement to go somewhere you need a label
+    - at least 10 selection statements
+    - at least 8 different loops (appropriate selection of loops)
+    - at least 3 numbers are randomly generated.
+    - at least 4 different arrays.
+    - at least 10 different methods
+
+
+completed parts of rubric:
+    - have at least 3 datatypes from user
+    - have clearly defined instructions.
+    - at least 3 additional class files.
 
 
 
-    what we have done right now
-- combat
-- being able to create the main character's name
-- figure out how to save where the location of the main character is.
-- making the map work with the
-- make enemies.
 
-- add an NPC (done but not sure where to place it in main + if there are faulty parts)
+
 

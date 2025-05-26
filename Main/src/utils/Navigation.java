@@ -14,8 +14,8 @@ public class Navigation {
 
     // Location names
     private static final String[] locationNames = {
-        "Main Base",       "Main Base",       "River",      "Destroyed Lab",  "Destroyed Lab",
-        "Main Base",       "Forest",          "River",      "Forest",         "Forest",
+        "Base",            "Base",            "River",      "Destroyed Lab",  "Destroyed Lab",
+        "Base",            "Forest",          "River",      "Forest",         "Forest",
         "Forest",          "Forest",          "River",      "River",          "Abandoned Camp",
         "Forest",          "Forest",          "Mountains",  "River",          "Mountains",
         "Abandoned Camp",  "Abandoned Camp",  "Mountains",  "Mountains",      "Mountains"
@@ -195,7 +195,8 @@ public class Navigation {
         }
     }
 
-    public static void map() {
+    /*
+      public static void map() {
         // Calculate player's current location
         playerX = currentLocation % 5;
         playerY = currentLocation / 5;
@@ -211,6 +212,35 @@ public class Navigation {
                     printColour("O ", ANSI_TEXT_YELLOW); // Travelable locations
                 } else {
                     printColour("- ", ANSI_TEXT_RED); // Non-travelable locations
+                }
+            }
+            System.out.println("|");
+        }
+        System.out.println("+---+---+---+---+---+");
+    }
+    */
+    public static void map() {
+        // Calculate player's current location
+        playerX = currentLocation % 5;
+        playerY = currentLocation / 5;
+
+        for (int y = 0; y < 5; y++) {
+            System.out.println("+---+---+---+---+---+");
+            for (int x = 0; x < 5; x++) {
+                System.out.print("| ");
+                int idx = y * 5 + x;
+                if (playerY == y && playerX == x) {
+                    printColour("P ", ANSI_TEXT_GREEN); // Player's current location
+                } else {
+                    // Get the first character of the area's name
+                    String areaName = locationNames[idx];
+                    char firstChar = Character.toUpperCase(areaName.charAt(0));
+                    // Optionally: color based on visited/unvisited
+                    if (visitedLocations[idx]) {
+                        printColour(firstChar + " ", ANSI_TEXT_YELLOW); // Visited
+                    } else {
+                        printColour(firstChar + " ", ANSI_TEXT_RED);    // Not visited
+                    }
                 }
             }
             System.out.println("|");
