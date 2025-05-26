@@ -1,141 +1,250 @@
 package utils;
+import java.util.Random;
 import java.util.Scanner;
+import static utils.Formatting.*;
 
 public class Navigation {
-
-    // ANSI codes for color - better readability in the console
-    private static final String ANSI_RESET = "\u001B[0;49m";
-    private static final String ANSI_TEXT_RED = "\u001B[91m";
-    private static final String ANSI_TEXT_GREEN = "\u001B[92m";
-    private static final String ANSI_TEXT_YELLOW = "\u001B[93m";
-    private static final String ANSI_TEXT_BLUE = "\u001B[94m";
-
     private static final Scanner sc = new Scanner(System.in);
+    private static final Random random = new Random();
 
     // Player's current location and coordinates
     private static int currentLocation = 00;
     private static int playerX, playerY;
+    private static int characterLocationIndex;
 
     // Location names
     private static final String[] locationNames = {
-        "Main Base",       "Main Base",       "River",      "Abandoned Lab",  "Abandoned Lab",
+        "Main Base",       "Main Base",       "River",      "Destroyed Lab",  "Destroyed Lab",
         "Main Base",       "Forest",          "River",      "Forest",         "Forest",
         "Forest",          "Forest",          "River",      "River",          "Abandoned Camp",
         "Forest",          "Forest",          "Mountains",  "River",          "Mountains",
         "Abandoned Camp",  "Abandoned Camp",  "Mountains",  "Mountains",      "Mountains"
     };
 
-    public static void navigate() {
-        int errorCount = 0;
+    // Whether the player has visited the location
+    private static final boolean[] visitedLocations = {
+        true, false, false, false, false,
+        false, false, false, false, false,
+        false, false, false, false, false,
+        false, false, false, false, false,
+        false, false, false, false, false
+    };
+
+    // Descriptions of the locations
+    private static final String[] locationDescriptions = {
+        "There might be some useful items here.",
+        "There might be some useful items here.",
+        "This rivers currents are too harsh, it's dangerous.",
+        "This is where the scientists were working, they must be around here.",
+        "This is where the scientists were working, they must be around here.",
+
+        "There might be some useful items here.",
+        "The forest is dense, and the trees are tall. There might be something lurking here.",
+        "This rivers currents are too harsh, it's dangerous.",
+        "It looks very dense. There might be something lurking here.",
+        "It looks very dense. There might be something lurking here.",
+
+        "It looks very dense. There might be something lurking here.",
+        "It looks very dense. There might be something lurking here.",
+        "This rivers currents are too harsh, it's dangerous.",
+        "This rivers currents are too harsh, it's dangerous.",
+        "It seems dangerous here, but it might have something useful.",
+
+        "It looks very dense. There might be something lurking here.",
+        "It looks very dense. There might be something lurking here.",
+        "The terrain is very rough. There might be something lurking here.",
+        "This rivers currents are too harsh, it's dangerous.",
+        "The terrain is very rough. There might be something lurking here.",
+
+        "It seems dangerous here, but it might have something useful.",
+        "It seems dangerous here, but it might have something useful.",
+        "The terrain is very rough. There might be something lurking here.",
+        "The terrain is very rough. There might be something lurking here.",
+        "The terrain is very rough. There might be something lurking here."
+    };
+
+    // Whether the location has combat
+    private static final boolean[] locationHasCombat = {
+        false, false, true, false, false,
+        false, true,  true, true,  true,
+        true,  true,  true, true,  true,
+        true,  true,  true, true,  true,
+        true,  true,  true, true,  true
+    };
+
+    // The maximum number of possible combat encounters at the location
+    private static final int[] possibleCombatEncounters = {
+        0, 0, 4, 0, 0,
+        0, 1, 4, 1, 1,
+        1, 1, 4, 4, 2,
+        1, 1, 2, 4, 2,
+        2, 2, 2, 2, 2
+    };
+
+    public static void navigate(Player player) {
         boolean validChoiceHandler = true;
 
+        // Calculate the coordinates and relative index of the player's location
+        playerX = currentLocation % 5;
+        playerY = currentLocation / 5;
+        characterLocationIndex = playerY * 5 + playerX;
+
+        // Print the current location and player options
+        print("You are currently in the " + ANSI_TEXT_YELLOW + locationNames[characterLocationIndex] + ANSI_RESET + ", where do you want to go?");
+        lineBreak();
+
+        // Print the map
+        map();
+
+        // Print the player's movement options
+        printColour("'W' - Up, 'A' - Left, 'S' - Down, 'D' - Right, '0' - Go Back", ANSI_TEXT_BLUE);
+        lineBreak();
+
         while (validChoiceHandler) {
-            boolean incorrectInput = false;
-
-            // Print the map before user input
-            map();
-
-            // Calculate the relative index of the player's location
-            int characterLocationIndex = playerX * 5 + playerY;
-
-            // Print the current location and player options
-            System.out.println("You are currently in the " + ANSI_TEXT_YELLOW + locationNames[characterLocationIndex] + ANSI_RESET + ", where do you want to go? "+ ANSI_TEXT_BLUE + "\n('W' - Up, 'A' - Left, 'S' - Down, 'D' - Right, 'Q' - Go Back)" + ANSI_RESET);
-
             // Get the player's movement direction
-            System.out.print(ANSI_TEXT_GREEN + " > " + ANSI_RESET);
-            char movementDirection = sc.next().toUpperCase().charAt(0);
+            printColour(" > ", ANSI_TEXT_GREEN);
+            String movementDirection = sc.nextLine().toUpperCase();
 
-            // Move the player or take them back to the player options
-            // If the player is at the edge of the map, set incorrectInput to true
-            switch (movementDirection) {
-                case 'W' -> {
-                    if (playerX == 0) {
-                        incorrectInput = true;
-                    } else {
-                        currentLocation -= 10;
+            if (movementDirection.isEmpty()) {
+                clearLine(1);
+            } else {
+                char movementDirectionChar = movementDirection.charAt(0);
+
+                // Move the player or take them back to the player options
+                switch (movementDirectionChar) {
+                    case 'W' -> {
+                        if (playerY != 0) {
+                            currentLocation -= 5;
+                            validChoiceHandler = false;
+                        } else {
+                            clearLine(1);
+                            continue;
+                        }
+                    }
+                    case 'A' -> {
+                        if (playerX != 0) {
+                            currentLocation -= 1;
+                            validChoiceHandler = false;
+                        } else {
+                            clearLine(1);
+                            continue;
+                        }
+                    }
+                    case 'S' -> {
+                        if (playerY != 4) {
+                            currentLocation += 5;
+                            validChoiceHandler = false;
+                        } else {
+                            clearLine(1);
+                            continue;
+                        }
+                    }
+                    case 'D' -> {
+                        if (playerX != 4) {
+                            currentLocation += 1;
+                            validChoiceHandler = false;
+                        } else {
+                            clearLine(1);
+                            continue;
+                        }
+                    }
+                    case '0' -> {
                         validChoiceHandler = false;
                     }
+                    default -> {
+                        clearLine(1);
+                        continue;
+                    }
                 }
-                case 'A' -> {
-                    if (playerY == 0) {
-                        incorrectInput = true;
+
+                // Calculate the new relative index of the player's location
+                playerX = currentLocation % 5;
+                playerY = currentLocation / 5;
+                characterLocationIndex = playerY * 5 + playerX;
+
+                // Remove the previous map and print the updated map
+                clearLine(14);
+                map();
+
+
+                // Print the player's new location
+                print("You are now in the " + ANSI_TEXT_YELLOW + locationNames[characterLocationIndex] + ANSI_RESET + ". \"" + locationDescriptions[characterLocationIndex] + "\"");
+                lineBreak();
+
+
+                // Check if the location has combat and if the player has not visited it
+                if (locationHasCombat[characterLocationIndex] && !visitedLocations[characterLocationIndex]) {
+
+                    int encounterChance = random.nextInt(100);
+
+                    if (encounterChance < 60) {
+                        int enemyCount = random.nextInt(possibleCombatEncounters[characterLocationIndex]) + 1;
+                        print("You have encountered " + enemyCount + " enemies!");
+                        lineBreak();
+
+                        Combat.combat(player);
                     } else {
-                        currentLocation -= 1;
-                        validChoiceHandler = false;
+                        print("You did not encounter any enemies.");
+                        lineBreak();
                     }
                 }
-                case 'S' -> {
-                    if (playerX == 4) {
-                        incorrectInput = true;
-                    } else {
-                        currentLocation += 10;
-                        validChoiceHandler = false;
-                    }
-                }
-                case 'D' -> {
-                    if (playerY == 4) {
-                        incorrectInput = true;
-                    } else {
-                        currentLocation += 1;
-                        validChoiceHandler = false;
-                    }
-                }
-                case 'Q' -> {
-                    System.out.println("[go back to main menu]");
-                    validChoiceHandler = false;
-                }
-                default -> {
-                    for (int i = 0; i < 14; i++) {
-                        System.out.print("\033[1A\033[2K");
-                    }
-                    System.out.println(ANSI_TEXT_RED + "Invalid input, please try again." + ANSI_RESET);
-                    errorCount++;
-                    continue;
-                }
+                // Update the visited locations
+                visitedLocations[characterLocationIndex] = true;
             }
-
-            // Delete the previous map and print the error message
-            if (incorrectInput) {
-                for (int i = 0; i < 14; i++) {
-                    System.out.print("\033[1A\033[2K");
-                }
-                System.out.println(ANSI_TEXT_RED + "You can't go that way, try again." + ANSI_RESET);
-                errorCount++;
-                continue;
-            }
-
-            // Remove the previous map and print the updated map
-            for (int i = 0; i < 14 + errorCount; i++) {
-                System.out.print("\033[1A\033[2K");
-            }
-
-            map();
-
-            // Print the player's new location
-            System.out.println("You are now in the " + ANSI_TEXT_YELLOW + locationNames[characterLocationIndex] + ANSI_RESET + ".");
         }
     }
 
-    private static void map() {
+    public static void map() {
         // Calculate player's current location
-        playerX = currentLocation / 10;
-        playerY = currentLocation % 10;
+        playerX = currentLocation % 5;
+        playerY = currentLocation / 5;
 
         // Print the map
-        for (int i = 0; i < 5; i++) {
+        for (int y = 0; y < 5; y++) {
             System.out.println("+---+---+---+---+---+");
-            for (int j = 0; j < 5; j++) {
+            for (int x = 0; x < 5; x++) {
                 System.out.print("| ");
-                if (playerX == i && playerY == j) {
-                    System.out.print(ANSI_TEXT_GREEN + "P " + ANSI_RESET); // Player's current location
-                } else if ((playerX == i && (playerY == j - 1 || playerY == j + 1)) || (playerY == j && (playerX == i - 1 || playerX == i + 1))) {
-                    System.out.print(ANSI_TEXT_YELLOW + "O " + ANSI_RESET); // Travelable locations
+                if (playerY == y && playerX == x) {
+                    printColour("P ", ANSI_TEXT_GREEN); // Player's current location
+                } else if ((playerY == y && (playerX == x - 1 || playerX == x + 1)) || (playerX == x && (playerY == y - 1 || playerY == y + 1))) {
+                    printColour("O ", ANSI_TEXT_YELLOW); // Travelable locations
                 } else {
-                    System.out.print(ANSI_TEXT_RED + "- " + ANSI_RESET); // Non-travelable locations
+                    printColour("- ", ANSI_TEXT_RED); // Non-travelable locations
                 }
             }
             System.out.println("|");
         }
         System.out.println("+---+---+---+---+---+");
+    }
+
+    public static void viewMap() {
+        // Calculate the coordinates and relative index of the player's location
+        playerX = currentLocation % 5;
+        playerY = currentLocation / 5;
+        characterLocationIndex = playerY * 5 + playerX;
+
+        // Print the player's current location
+        System.out.println("You are currently in the " + ANSI_TEXT_YELLOW + locationNames[characterLocationIndex] + ANSI_RESET);
+
+        // Print the map
+        map();
+
+        // Show possible directions and destination names
+        if (playerY > 0) {
+            print(ANSI_TEXT_YELLOW + "Above" + ANSI_RESET + " you is the " + ANSI_TEXT_YELLOW + locationNames[characterLocationIndex - 5] + ANSI_RESET + ". \"" + locationDescriptions[characterLocationIndex - 5] + "\"");
+            lineBreak();
+        }
+        if (playerY < 4) {
+            print(ANSI_TEXT_YELLOW + "Below" + ANSI_RESET + " you is the " + ANSI_TEXT_YELLOW + locationNames[characterLocationIndex + 5] + ANSI_RESET + ". \"" + locationDescriptions[characterLocationIndex + 5] + "\"");
+            lineBreak();
+        }
+        if (playerX > 0) {
+            print("To the " + ANSI_TEXT_YELLOW + "Left" + ANSI_RESET + " of you is the " + ANSI_TEXT_YELLOW + locationNames[characterLocationIndex - 1] + ANSI_RESET + ". \"" + locationDescriptions[characterLocationIndex - 1] + "\"");
+            lineBreak();
+        }
+        if (playerX < 4) {
+            print("To the " + ANSI_TEXT_YELLOW + "Right" + ANSI_RESET + " of you is the " + ANSI_TEXT_YELLOW + locationNames[characterLocationIndex + 1] + ANSI_RESET + ". \"" + locationDescriptions[characterLocationIndex + 1] + "\"");
+            lineBreak();
+        }
     }
 }
