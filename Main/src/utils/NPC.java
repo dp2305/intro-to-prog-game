@@ -2,8 +2,8 @@ package utils;
 import java.util.Scanner;
 
 public class NPC {
-    private String name;
-    private Scanner passedInScanner;
+    private final String name;
+    private final Scanner passedInScanner;
 
     public NPC(String name, Scanner passedInScanner) {
         this.name = name;
