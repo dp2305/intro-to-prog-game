@@ -177,17 +177,18 @@ public class Navigation {
 
                     int encounterChance = random.nextInt(100);
 
-                    if (encounterChance < 60) {
+                    if (encounterChance < 66) {
                         int enemyCount = random.nextInt(possibleCombatEncounters[characterLocationIndex]) + 1;
                         print("You have encountered " + enemyCount + " enemies!");
                         lineBreak();
 
-                        Combat.combat(player);
+                        Combat.combat(player, enemyCount);
                     } else {
                         print("You did not encounter any enemies.");
                         lineBreak();
                     }
                 }
+
                 // Update the visited locations
                 visitedLocations[characterLocationIndex] = true;
             }
@@ -229,7 +230,7 @@ public class Navigation {
         // Print the map
         map();
 
-        // Show possible directions and destination names
+        // Show possible directions and destination names and descriptions
         if (playerY > 0) {
             print(ANSI_TEXT_YELLOW + "Above" + ANSI_RESET + " you is the " + ANSI_TEXT_YELLOW + locationNames[characterLocationIndex - 5] + ANSI_RESET + ". \"" + locationDescriptions[characterLocationIndex - 5] + "\"");
             lineBreak();
@@ -246,5 +247,13 @@ public class Navigation {
             print("To the " + ANSI_TEXT_YELLOW + "Right" + ANSI_RESET + " of you is the " + ANSI_TEXT_YELLOW + locationNames[characterLocationIndex + 1] + ANSI_RESET + ". \"" + locationDescriptions[characterLocationIndex + 1] + "\"");
             lineBreak();
         }
+    }
+
+    public static void search(Player player) {
+
+    }
+
+    public static boolean playerHasVisitedLocation() {
+        return visitedLocations[characterLocationIndex];
     }
 }

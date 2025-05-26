@@ -4,13 +4,13 @@ import utils.*;
 import static utils.Formatting.*;
 
 public class Main {
-
-    // Scanner and Random obje  cts
+    // Scanner and Random objects
     private static final Scanner sc = new Scanner(System.in);
+    @SuppressWarnings("unused")
     private static final Random random = new Random();
 
     // Game variables
-    private static Player playerCharacter = new Player("Player", 50);
+    private static final Player playerCharacter = new Player("Player", 50);
     public static boolean gameRunning = true;
     private static boolean validChoiceHandler, validChoiceHandler2;
 
@@ -37,87 +37,54 @@ public class Main {
             String choice = sc.nextLine().toUpperCase();
 
             if (choice.isEmpty()) {
+                printGap = false;
                 clearLine(2);
             } else {
                 char choiceChar = choice.charAt(0);
                 switch (choiceChar) {
+                    // Use item
                     case '1' -> {
+                        printColour("<=-- Using Item --=>", ANSI_TEXT_YELLOW);
                         lineBreak();
-                        printColour("            <=-- Using Item --=>", ANSI_TEXT_YELLOW);
                         lineBreak();
-                        print("What item would you like to use? \n" + ANSI_TEXT_BLUE + playerCharacter.showBackpack() + ANSI_RESET);
-                        lineBreak();
-                        while (validChoiceHandler) {
-                            printColour(" > ", ANSI_TEXT_GREEN);
-                            String itemChoice = sc.nextLine();
-
-                            if (itemChoice.isEmpty()) {
-                                clearLine(1);
-                            } else {
-                                char itemChoiceChar = itemChoice.charAt(0);
-                                switch (itemChoiceChar) {
-                                    case '1' -> {
-                                        Items item = playerCharacter.getBackpackItem(0);
-                                        item.useItem(playerCharacter, item);
-                                        validChoiceHandler = false;
-                                    }
-                                    case '2' -> {
-                                        Items item = playerCharacter.getBackpackItem(1);
-                                        item.useItem(playerCharacter, item);
-                                        validChoiceHandler = false;
-                                    }
-                                    case '0' -> {
-                                        validChoiceHandler = false;
-                                    }
-                                    default -> {
-                                        clearLine(1);
-                                    }
-                                }
-                            }
-                        }
+                        Items.useItem(playerCharacter);
                     }
+                    // Move
                     case '2' -> {
-                        printColour("            <=-- Navigating --=>", ANSI_TEXT_YELLOW);
+                        printColour("<=-- Navigating --=>", ANSI_TEXT_YELLOW);
                         lineBreak();
                         lineBreak();
                         Navigation.navigate(playerCharacter);
                     }
+                    // View Map
                     case '3' -> {
-                        printColour("            <=-- Viewing Map --=>", ANSI_TEXT_YELLOW);
+                        printColour("<=-- Viewing Map --=>", ANSI_TEXT_YELLOW);
                         lineBreak();
                         lineBreak();
                         Navigation.viewMap();
                     }
+                    // Search
                     case '4' -> {
-                        printColour("            <=-- Searching --=>", ANSI_TEXT_YELLOW);
+                        printColour("<=-- Searching --=>", ANSI_TEXT_YELLOW);
                         lineBreak();
                         lineBreak();
                         // search for items
                     }
+                    // Rest
                     case '5' -> {
-                        printColour("            <=-- Resting --=>", ANSI_TEXT_YELLOW);
+                        printColour(" <=-- Resting --=>", ANSI_TEXT_YELLOW);
                         lineBreak();
                         lineBreak();
-                        // rest (heal a random amount of health from (1-4)), must only rest once per 2 movements and cannot rest if health is full
+                        Player.rest(playerCharacter);
                     }
+                    // Check Character
                     case '6' -> {
-                        printColour("            <=-- Checking Character --=>", ANSI_TEXT_YELLOW);
+                        printColour("<=-- Checking Character --=>", ANSI_TEXT_YELLOW);
                         lineBreak();
                         lineBreak();
-                        print("You have " + playerCharacter.getHealth() + " health.");
-                        lineBreak();
-
-                        // Display Weapon - don't display ammo if the weapon is a knife
-                        if (playerCharacter.getWeapon().getName().equals("Knife")) {
-                            print("You are carrying a " + playerCharacter.getWeapon().getName() + ".");
-                        } else {
-                            print("You are carrying a " + playerCharacter.getWeapon().getName() + " with " + playerCharacter.getWeapon().getAmmo() + " ammo.");
-                        }
-                        lineBreak();
-
-                        // Display Backpack
-                        print("You are carrying the following items: \n" + playerCharacter.showBackpack());
+                        Player.checkCharacter(playerCharacter);
                     }
+                    // Invalid choice
                     default -> {
                         printGap = false;
                         clearLine(2);
@@ -380,48 +347,6 @@ public class Main {
             }
             itemHandler++;
             lineBreak();
-        }
-    }
-
-    // mission 1 still needs to be completed
-    public static void mission1() {
-        validChoiceHandler = true;
-
-        // Handle player's choice
-        while (validChoiceHandler) {
-            // This is the intro code that gives the player the first choice
-            print("You have been dropped off at the main base.");
-            lineBreak();
-            print("What would you like to do from here? ");
-            printColour("(S)earch, (L)ook around", ANSI_TEXT_BLUE);
-            lineBreak();
-            printColour(" > ", ANSI_TEXT_GREEN);
-            lineBreak();
-            String choice = sc.next().toUpperCase();
-
-            if (choice.isEmpty()) {
-                clearLine(1);
-            } else {
-                char choiceChar = choice.charAt(0);
-                switch (choiceChar) {
-                    case 'S' -> {
-                        print("You search the area and find some supplies.");
-                        // Add more flavour text here
-                        lineBreak();
-                        validChoiceHandler = false;
-                    }
-                    case 'L' -> {
-                        print("You look around and see various buildings and military equipment.");
-                        // Add more flavour text here
-                        lineBreak();
-                        validChoiceHandler = false;
-                    }
-                    default -> {
-                        printColour("Invalid choice. Please try again.", ANSI_TEXT_RED);
-                        lineBreak();
-                    }
-                }
-            }
         }
     }
 }

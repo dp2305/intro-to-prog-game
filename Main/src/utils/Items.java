@@ -1,6 +1,11 @@
 package utils;
+import java.util.Scanner;
+import static utils.Formatting.*;
 
 public class Items {
+
+   private static final Scanner sc = new Scanner(System.in);
+
    // Fields to store item details
    private String name;
    private int value; // Value is what the item provides, eg. for ammo, it is the number of bullets, for healing items, it is the amount of health it heals
@@ -15,30 +20,74 @@ public class Items {
       this.type = type;
    }
 
-   public Items(String name, int weight) {
-      this.name = name;
-      this.weight = weight;
-   }
-
-   public void useItem(Player player, Items item) {
+   public static void useItem(Player player) {
+      boolean validChoiceHandler = true;
       Weapon weapon = player.getWeapon();
+      int backpackSize = player.showBackpack().split("\n").length;
 
-      if (type == 0) {
-         player.setHealth(player.getHealth() + value);
-         System.out.println("You used the " + name + " and recovered " + value + " health");
-         player.removeBackpackItem(item);
-      } else if (type == 1) {
-         if (weapon.getName().equals("Knife")) {
-            System.out.println("Knifes do not require ammo");
+      // If the player has no items in their backpack, print a message and exit the method
+      if (player.showBackpack().isEmpty()) {
+         print("You have no items in your backpack.");
+         lineBreak();
+         validChoiceHandler = false;
+      } else {
+         print("What item would you like to use? \n" + ANSI_TEXT_BLUE + "(0) Go Back \n" + player.showBackpack() + ANSI_RESET);
+      }
+
+      while (validChoiceHandler) {
+         printColour(" > ", ANSI_TEXT_GREEN);
+         String itemChoice = sc.nextLine();
+
+         if (itemChoice.isEmpty()) {
+            clearLine(1);
          } else {
-            weapon.setAmmo(weapon.getAmmo() + value);
-            System.out.println("You used the " + name + " and added " + value + " ammo to your " + weapon.getName());
-            player.removeBackpackItem(item);
+            int itemIndex = -1;
+
+            // Try to parse input character as number
+            try {
+               itemIndex = Character.getNumericValue(itemChoice.charAt(0));
+            } catch (NumberFormatException e) {
+               clearLine(itemIndex);
+            }
+
+            if (itemIndex == 0) {
+               // User chose to go back
+               validChoiceHandler = false;
+            } else if (itemIndex > 0 && itemIndex <= backpackSize) {
+               // Valid item index
+               try {
+                  Items item = player.getBackpackItem(itemIndex - 1);
+                  if (item.getType() == 0) {
+                     // If player will over heal from item, don't allow healing
+                     if (player.getHealth() + item.getValue() > 55) {
+                        clearLine(5);
+                        print("You can't use the " + ANSI_TEXT_YELLOW + item.getName() + ANSI_RESET + " yet.");
+                        lineBreak();
+                        lineBreak();
+                        useItem(player);
+                     } else {
+                        player.setHealth(player.getHealth() + item.getValue());
+                        print("You used the " + ANSI_TEXT_YELLOW + item.getName() + ANSI_RESET + " and recovered " + ANSI_TEXT_YELLOW + item.getValue() + " health" + ANSI_RESET + ".");
+                     }
+                  } else if (item.getType() == 1) {
+                     weapon.setAmmo(weapon.getAmmo() + item.getValue());
+                     print("You used the " + ANSI_TEXT_YELLOW + item.getName() + ANSI_RESET + " and added " + ANSI_TEXT_YELLOW + item.getValue() + " ammo to your " + weapon.getName() + ANSI_RESET + ".");
+                  }
+                  lineBreak();
+
+                  // Remove the item after using it
+                  player.removeBackpackItem(item);
+                  validChoiceHandler = false;
+               } catch (IndexOutOfBoundsException e) {
+                  clearLine(1);
+               }
+            } else {
+               clearLine(1);
+            }
          }
       }
    }
 
-   // Gets
    public String getName() {
       return name;
    }
@@ -55,7 +104,6 @@ public class Items {
       return type;
    }
 
-   // Sets
    public void setName(String name) {
       this.name = name;
    }

@@ -21,7 +21,7 @@ public class NPC {
         String response = passedInScanner.nextLine();
 
         if (response.equalsIgnoreCase("y")) {
-            System.out.println(name + ": Good. We/’re counting on you.");
+            System.out.println(name + ": Good. We're counting on you.");
         } else {
             System.out.println(name + ": Shut the hell up. In fact, I've got your whole family hostage, so get a move on before I get someone to blow their brains out.");
         }

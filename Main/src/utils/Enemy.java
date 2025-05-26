@@ -12,9 +12,6 @@ public class Enemy {
         this.weight = weight;
     }
 
-    public Enemy() {
-   }
-
     public void setName(String name) {
         this.name = name;
     }
