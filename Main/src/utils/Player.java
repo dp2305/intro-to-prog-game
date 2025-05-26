@@ -5,8 +5,7 @@ public class Player {
     private String name;
     private int health;
     private Weapon weapon;
-    // Use an arraylist to handle items in the backpack
-    private ArrayList<Items> backpack = new ArrayList<>();
+    private ArrayList<Items> backpack = new ArrayList<>(); // Use an arraylist to handle items in the backpack
 
     public Player(String name, int health) {
         this.name = name;
@@ -16,10 +15,12 @@ public class Player {
     public Player() {
     }
 
-    public void showBackpack() {
+    public String showBackpack() {
+        String backpackString = "";
         for (Items item : backpack) {
-            System.out.println(item);
+            backpackString += String.format("(%d) %s\n", backpack.indexOf(item) + 1, item.getName());
         }
+        return backpackString;
     }
 
     public void addBackpackItem(Items item) {
@@ -28,6 +29,19 @@ public class Player {
 
     public void removeBackpackItem(Items item) {
         backpack.remove(item);
+    }
+
+    public Items getBackpackItem(int index) {
+        return backpack.get(index);
+    }
+
+    public Items getBackpackItem(String name) {
+        for (Items item : backpack) {
+            if (item.getName().equals(name)) {
+                return item;
+            }
+        }
+        return null;
     }
 
     public void setName(String name) {

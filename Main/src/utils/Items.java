@@ -3,37 +3,37 @@ package utils;
 public class Items {
    // Fields to store item details
    private String name;
-   private int value;
+   private int value; // Value is what the item provides, eg. for ammo, it is the number of bullets, for healing items, it is the amount of health it heals
    private int weight;
-   // Function number is what the item provides, eg. for ammo, it is the number of bullets, for healing items, it is the amount of health it heals
-   private int functionNumber;
-   // Type is the type of item, eg. healing (0), ammo (1)
-   private int type;
+   private int type; // Type is the type of item, eg. healing (0), ammo (1)
 
    // Constructor to initialize an item with a name, value, and weight.
-   public Items(String name, int value, int weight, int functionNumber, int type) {
+   public Items(String name, int value, int weight, int type) {
       this.name = name;
       this.value = value;
       this.weight = weight;
-      this.functionNumber = functionNumber;
       this.type = type;
    }
 
-   public void useItem(Player player) {
+   public Items(String name, int weight) {
+      this.name = name;
+      this.weight = weight;
+   }
+
+   public void useItem(Player player, Items item) {
       Weapon weapon = player.getWeapon();
-      System.out.println("You used the " + name);
 
       if (type == 0) {
-         player.setHealth(player.getHealth() + functionNumber);
-         System.out.println("You healed " + functionNumber + " health");
-         player.removeBackpackItem(this);
+         player.setHealth(player.getHealth() + value);
+         System.out.println("You used the " + name + " and recovered " + value + " health");
+         player.removeBackpackItem(item);
       } else if (type == 1) {
          if (weapon.getName().equals("Knife")) {
             System.out.println("Knifes do not require ammo");
          } else {
-            weapon.setAmmo(weapon.getAmmo() + functionNumber);
-            System.out.println("You added " + functionNumber + " ammo to your " + weapon.getName());
-            player.removeBackpackItem(this);
+            weapon.setAmmo(weapon.getAmmo() + value);
+            System.out.println("You used the " + name + " and added " + value + " ammo to your " + weapon.getName());
+            player.removeBackpackItem(item);
          }
       }
    }
@@ -51,10 +51,6 @@ public class Items {
       return weight;
    }
 
-   public int getFunctionNumber() {
-      return functionNumber;
-   }
-
    public int getType() {
       return type;
    }
@@ -70,10 +66,6 @@ public class Items {
 
    public void setWeight(int weight) {
       this.weight = weight;
-   }
-
-   public void setFunctionNumber(int functionNumber) {
-      this.functionNumber = functionNumber;
    }
 
    public void setType(int type) {

@@ -7,10 +7,7 @@ public class Combat {
     public static Scanner sc = new Scanner(System.in);
     private static Random diceRoll = new Random();
 
-    // Make player and monster static so they are accessible in static methods
-    private static boolean alive = true;
-
-    public static void combat(Player player, boolean gameRunning) {
+    public static void combat(Player player) {
         int enemySelection = diceRoll.nextInt(8);
         int weaponSelection = diceRoll.nextInt(3);
 
@@ -97,7 +94,7 @@ public class Combat {
             gorillaWeapons[weaponSelection]
         };
 
-        // Set Enemy and Weapon
+        // Set Enemy outside of while loop so it doesn't change every fight
         Enemy enemy = enemies[enemySelection];
 
         // Enemy weapons need to be set every fight
@@ -166,10 +163,7 @@ public class Combat {
                 default -> System.out.println("Invalid choice");
             }
             if (player.getHealth() <= 0) {
-                alive = false;
                 continueFighting = false;
-                System.out.println("You failed your mission, game over.");
-                gameRunning = false;
             }
             if (enemy.getHealth() <= 0) {
                 continueFighting = false;
