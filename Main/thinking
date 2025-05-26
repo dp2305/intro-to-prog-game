@@ -5,7 +5,7 @@
 - set up enemy encounters (random generator)
 - work on story
 - decide on if (S)earch, (L)ook around, (M)ap as the basic options is fine
-- add an NPC
+
 
 
     what we have done right now
@@ -15,4 +15,5 @@
 - making the map work with the
 - make enemies.
 
+- add an NPC (done but not sure where to place it in main + if there are faulty parts)
 
