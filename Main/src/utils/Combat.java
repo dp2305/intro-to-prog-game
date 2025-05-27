@@ -26,6 +26,7 @@ public class Combat {
         };
 
         // Enemy Attacks
+
         // Snake Attacks
         Weapon[] snakeWeapons = {
             new Weapon("Bite", 2, MAX_AMMO, 2, 1),
@@ -171,7 +172,7 @@ public class Combat {
                                 enemyAttackRoll = random.nextInt(6) + 1;
 
                                 if (enemyAttackRoll <= 1) {
-                                    print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + " failed to hattackit you.");
+                                    print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + " failed to attack you.");
                                     lineBreak();
                                 } else {
                                     print("You get hit for " + ANSI_TEXT_YELLOW + enemy.getWeapon().getDamage() + damageVariance + ANSI_RESET + " damage.");

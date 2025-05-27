@@ -10,6 +10,7 @@ public class Formatting {
    public static final String ANSI_TEXT_BLUE = "\u001B[94m";
 
    // Printing methods created to simplify coding and reading text-heavy sections of code
+
    // Method to print text
    public static void print(String text) {
       System.out.print(text);
