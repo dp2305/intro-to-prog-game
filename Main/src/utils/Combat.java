@@ -196,7 +196,7 @@ public class Combat {
                 if (enemy.getHealth() <= 0) {
                     continueFighting = false;
                     fightCount++;
-                    print("You survived this encounter, continue your mission.");
+                    print("You survived this encounter, continue the mission.");
                 }
             }
         }
