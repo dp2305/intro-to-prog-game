@@ -16,75 +16,75 @@ public class Combat {
 
         // Enemies
         Enemy[] enemies = {
-            new Enemy("Snake",            5, 1),
-            new Enemy("Raven",            5, 2),
-            new Enemy("Vulture",          5, 3),
-            new Enemy("Wolf",             10, 3),
-            new Enemy("Wild Boar",        15, 5),
-            new Enemy("Bear",             20, 8),
-            new Enemy("Sabretooth Tiger", 20, 10)
+                new Enemy("Snake",            5, 1),
+                new Enemy("Raven",            5, 2),
+                new Enemy("Vulture",          5, 3),
+                new Enemy("Wolf",             10, 3),
+                new Enemy("Wild Boar",        15, 5),
+                new Enemy("Bear",             20, 8),
+                new Enemy("Sabretooth Tiger", 20, 10)
         };
 
         // Enemy Attacks
 
         // Snake Attacks
         Weapon[] snakeWeapons = {
-            new Weapon("Bite", 2, MAX_AMMO, 2, 1),
-            new Weapon("Coil", 3, MAX_AMMO, 1, 1),
-            new Weapon("Poison", 4, MAX_AMMO, 1, 1)
+                new Weapon("Bite", 2, MAX_AMMO, 2, 1),
+                new Weapon("Coil", 3, MAX_AMMO, 1, 1),
+                new Weapon("Poison", 4, MAX_AMMO, 1, 1)
         };
 
         // Raven Attacks
         Weapon[] ravenWeapons = {
-            new Weapon("Beak", 2, MAX_AMMO, 1, 1),
-            new Weapon("Charge", 2, MAX_AMMO, 2, 1),
-            new Weapon("Talons", 4, MAX_AMMO, 1, 1)
+                new Weapon("Beak", 2, MAX_AMMO, 1, 1),
+                new Weapon("Charge", 2, MAX_AMMO, 2, 1),
+                new Weapon("Talons", 4, MAX_AMMO, 1, 1)
         };
 
         // Vulture Attacks
         Weapon[] vultureWeapons = {
-            new Weapon("Beak", 3, MAX_AMMO, 2, 1),
-            new Weapon("Charge", 3, MAX_AMMO, 2, 1),
-            new Weapon("Talons", 5, MAX_AMMO, 1, 1)
+                new Weapon("Beak", 3, MAX_AMMO, 2, 1),
+                new Weapon("Charge", 3, MAX_AMMO, 2, 1),
+                new Weapon("Talons", 5, MAX_AMMO, 1, 1)
         };
 
         // Wolf Attacks
         Weapon[] wolfWeapons = {
-            new Weapon("Headbutt", 2, MAX_AMMO, 2, 1),
-            new Weapon("Claws", 3, MAX_AMMO, 1, 1),
-            new Weapon("Bite", 4, MAX_AMMO, 1, 1)
+                new Weapon("Headbutt", 2, MAX_AMMO, 2, 1),
+                new Weapon("Claws", 3, MAX_AMMO, 1, 1),
+                new Weapon("Bite", 4, MAX_AMMO, 1, 1)
         };
 
         // Wild Boar Attacks
         Weapon[] wildBoarWeapons = {
-            new Weapon("Kick", 4, MAX_AMMO, 2, 1),
-            new Weapon("Charge", 5, MAX_AMMO, 2, 1),
-            new Weapon("Ram", 6, MAX_AMMO, 1, 1)
+                new Weapon("Kick", 4, MAX_AMMO, 2, 1),
+                new Weapon("Charge", 5, MAX_AMMO, 2, 1),
+                new Weapon("Ram", 6, MAX_AMMO, 1, 1)
         };
 
         // Bear Attacks
         Weapon[] bearWeapons = {
-            new Weapon("Punch", 4, MAX_AMMO,2, 1),
-            new Weapon("Kick", 5, MAX_AMMO, 2, 1),
-            new Weapon("Hug", 6, MAX_AMMO, 1, 1)
+                new Weapon("Punch", 4, MAX_AMMO,2, 1),
+                new Weapon("Kick", 5, MAX_AMMO, 2, 1),
+                new Weapon("Hug", 6, MAX_AMMO, 1, 1)
         };
 
         // Sabretooth Tiger Attacks
         Weapon[] sabretoothTigerWeapons = {
-            new Weapon("Headbutt", 4, MAX_AMMO, 2, 1),
-            new Weapon("Bite", 5, MAX_AMMO, 2, 1),
-            new Weapon("Claws", 7, MAX_AMMO, 1, 1)
+                new Weapon("Headbutt", 4, MAX_AMMO, 2, 1),
+                new Weapon("Bite", 5, MAX_AMMO, 2, 1),
+                new Weapon("Claws", 7, MAX_AMMO, 1, 1)
         };
 
         // All enemy weapons
         Weapon[] enemyWeapons = {
-            snakeWeapons[weaponSelection],
-            ravenWeapons[weaponSelection],
-            vultureWeapons[weaponSelection],
-            wolfWeapons[weaponSelection],
-            wildBoarWeapons[weaponSelection],
-            bearWeapons[weaponSelection],
-            sabretoothTigerWeapons[weaponSelection]
+                snakeWeapons[weaponSelection],
+                ravenWeapons[weaponSelection],
+                vultureWeapons[weaponSelection],
+                wolfWeapons[weaponSelection],
+                wildBoarWeapons[weaponSelection],
+                bearWeapons[weaponSelection],
+                sabretoothTigerWeapons[weaponSelection]
         };
 
         int playerAttackRoll, enemyAttackRoll;
@@ -196,7 +196,7 @@ public class Combat {
                 if (enemy.getHealth() <= 0) {
                     continueFighting = false;
                     fightCount++;
-                    print("You survived this encoutner, continue your mission.");
+                    print("You survived this encounter, continue your mission.");
                 }
             }
         }
