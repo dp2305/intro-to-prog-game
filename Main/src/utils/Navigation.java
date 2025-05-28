@@ -49,10 +49,10 @@ public class Navigation {
 
     // The maximum number of possible combat encounters at the location
     private static final int[] possibleCombatEncounters = {
-        0, 0, 4, 0, 0,
-        0, 1, 4, 1, 1,
-        1, 1, 4, 4, 2,
-        2, 1, 2, 4, 2,
+        0, 0, 3, 0, 0,
+        0, 1, 3, 1, 1,
+        1, 1, 3, 3, 2,
+        1, 1, 2, 2, 2,
         1, 2, 2, 2, 2
     };
 
@@ -90,7 +90,7 @@ public class Navigation {
     };
 
     public static void navigate(Player player) {
-        boolean validChoiceHandler = true;
+        boolean isValidChoice = true;
 
         // Calculate the coordinates and relative index of the player's location
         playerX = currentLocation % 5;
@@ -108,7 +108,7 @@ public class Navigation {
         printColour("'W' - Up, 'A' - Left, 'S' - Down, 'D' - Right, '0' - Go Back", ANSI_TEXT_BLUE);
         lineBreak();
 
-        while (validChoiceHandler) {
+        while (isValidChoice) {
             // Get the player's movement direction
             printColour(" > ", ANSI_TEXT_GREEN);
             String movementDirection = sc.nextLine().toUpperCase();
@@ -123,7 +123,7 @@ public class Navigation {
                     case 'W' -> {
                         if (playerY != 0) {
                             currentLocation -= 5;
-                            validChoiceHandler = false;
+                            isValidChoice = false;
                         } else {
                             clearLine(1);
                             continue;
@@ -132,7 +132,7 @@ public class Navigation {
                     case 'A' -> {
                         if (playerX != 0) {
                             currentLocation -= 1;
-                            validChoiceHandler = false;
+                            isValidChoice = false;
                         } else {
                             clearLine(1);
                             continue;
@@ -141,7 +141,7 @@ public class Navigation {
                     case 'S' -> {
                         if (playerY != 4) {
                             currentLocation += 5;
-                            validChoiceHandler = false;
+                            isValidChoice = false;
                         } else {
                             clearLine(1);
                             continue;
@@ -150,14 +150,14 @@ public class Navigation {
                     case 'D' -> {
                         if (playerX != 4) {
                             currentLocation += 1;
-                            validChoiceHandler = false;
+                            isValidChoice = false;
                         } else {
                             clearLine(1);
                             continue;
                         }
                     }
                     case '0' -> {
-                        validChoiceHandler = false;
+                        isValidChoice = false;
                     }
                     default -> {
                         clearLine(1);
@@ -178,11 +178,9 @@ public class Navigation {
                 print("You are now in the " + ANSI_TEXT_YELLOW + locationNames[characterLocationIndex] + ANSI_RESET + ". \"" + locationDescriptions[characterLocationIndex] + "\"");
                 lineBreak();
 
-                // Check if the location has combat and if the player has not visited it
+                // Check if the location has combat
                 if (locationHasCombat[characterLocationIndex]) {
                     Combat.combat(player);
-                    //  After the player has had a battle, combat for that location index is set to false
-                    locationHasCombat[characterLocationIndex] = false;
                 }
             }
         }
@@ -277,6 +275,7 @@ public class Navigation {
         print("+---+---+---+---+---+");
         lineBreak();
     }
+
     // To check if the player is at a certain loation
     public static String getLocationName() {
         return locationNames[characterLocationIndex];
@@ -303,7 +302,12 @@ public class Navigation {
     }
 
     // Update the rested locations
-    public static void UpdateRestedLocations() {
+    public static void updateRestedLocations() {
         restedLocations[characterLocationIndex] = false;
+    }
+
+    // Update the location fight status
+    public static void updateLocationFightStatus() {
+        locationHasCombat[characterLocationIndex] = false;
     }
 }

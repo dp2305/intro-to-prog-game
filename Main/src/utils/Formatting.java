@@ -25,6 +25,13 @@ public class Formatting {
       System.out.println();
    }
 
+   // Method to print multiple line breakss
+   public static void lineBreak(int lineCount) {
+      for (int i = 0; i < lineCount; i++) {
+         System.out.println();
+      }
+   }
+
    // Method to clear line(s) for a cleaner console output, e.g. after an error message is printed
    public static void clearLine(int clearLineCount) {
       for (int i = 0; i < clearLineCount; i++) {
@@ -34,7 +41,6 @@ public class Formatting {
 
    public static void printSpacer() {
       printColour("            ----------------------------", ANSI_TEXT_GREEN);
-      lineBreak();
-      lineBreak();
+      lineBreak(2);
    }
 }

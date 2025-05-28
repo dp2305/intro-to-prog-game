@@ -51,7 +51,7 @@ public class Weapon {
         this.weight = weight;
     }
 
-    public void setRanget(int range) {
+    public void setRange(int range) {
         this.range = range;
     }
 }

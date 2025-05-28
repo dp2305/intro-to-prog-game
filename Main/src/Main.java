@@ -11,15 +11,16 @@ public class Main {
 
     public static void main(String[] args) {
         boolean gameRunning = true;
+        boolean repeatOptions = true;
+        boolean printSeperator = true;
 
         do {
-            // Generate a new player at the start of the while loop to so that all information about the player is reset
+            // Generate a new player at the start of the while loop so that all player information is reset
             final Player playerCharacter = new Player("Player", 1000, true);
-            boolean repeatOptions = true;
-            playerName(playerCharacter);
-            missionInformation(playerCharacter);
-            weaponSelection(playerCharacter);
-            itemsSelection(playerCharacter);
+            promptPlayerName(playerCharacter);
+            displayMissionInformation(playerCharacter);
+            playerWeaponSelection(playerCharacter);
+            playerItemSelection(playerCharacter);
 
             do {
                 // Recalculate player weight before each action
@@ -27,7 +28,6 @@ public class Main {
 
                 primaryChoiceHandler = true;
                 secondaryChoiceHandler = true;
-                boolean printGap = true;
 
                 print("What would you like to do? " + ANSI_TEXT_BLUE + "(1) Use item, (2) Move, (3) Look Nearby, (4) Search, (5) Rest, (6) Check Character, (7) View Given Map" + ANSI_RESET);
                 lineBreak();
@@ -35,7 +35,7 @@ public class Main {
                 String choice = sc.nextLine().toUpperCase();
 
                 if (choice.isEmpty()) {
-                    printGap = false;
+                    printSeperator = false;
                     clearLine(2);
                 } else {
                     int choiceInt;
@@ -50,70 +50,64 @@ public class Main {
                         // Use item
                         case 1 -> {
                             printColour("<=-- Using Item --=>", ANSI_TEXT_YELLOW);
-                            lineBreak();
-                            lineBreak();
+                            lineBreak(2);
                             Items.useItem(playerCharacter);
                         }
                         // Move
                         case 2 -> {
                             printColour("<=-- Navigating --=>", ANSI_TEXT_YELLOW);
-                            lineBreak();
-                            lineBreak();
+                            lineBreak(2);
                             Navigation.navigate(playerCharacter);
                         }
                         // View Map
                         case 3 -> {
                             printColour("<=-- Looking Nearby --=>", ANSI_TEXT_YELLOW);
-                            lineBreak();
-                            lineBreak();
+                            lineBreak(2);
                             Navigation.viewMap();
                         }
                         // Search
                         case 4 -> {
                             printColour("<=-- Searching --=>", ANSI_TEXT_YELLOW);
-                            lineBreak();
-                            lineBreak();
+                            lineBreak(2);
                             Player.search(playerCharacter);
                         }
                         // Rest
                         case 5 -> {
                             printColour(" <=-- Resting --=>", ANSI_TEXT_YELLOW);
-                            lineBreak();
-                            lineBreak();
+                            lineBreak(2);
                             Player.rest(playerCharacter);
                         }
                         // Check Character
                         case 6 -> {
                             printColour("<=-- Checking Character --=>", ANSI_TEXT_YELLOW);
-                            lineBreak();
-                            lineBreak();
+                            lineBreak(2);
                             Player.checkCharacter(playerCharacter);
                         }
+                        // View Mission Map
                         case 7 -> {
                             printColour("<=-- Viewing Map --=>", ANSI_TEXT_YELLOW);
-                            lineBreak();
-                            lineBreak();
+                            lineBreak(2);
                             Navigation.viewMissionMap();
                         }
-                        case 8 -> {
+                        // Add all fragments to the player's backpack for testing purposes
+                        case 5428 -> {
                             printColour("<=-- Adding Fragments --=>", ANSI_TEXT_YELLOW);
-                            lineBreak();
-                            lineBreak();
+                            lineBreak(2);
                             for (int i = 0; i < 9; i++) {
                                 playerCharacter.addBackpackItem(new Items("Fragment " + (i + 1), (i + 1), 0, 2));
                             }
-                            print("fragments added.");
+                            print("All fragments added.");
                             lineBreak();
                         }
                         // Invalid choice
                         default -> {
-                            printGap = false;
+                            printSeperator = false;
                             clearLine(2);
                         }
                     }
                 }
 
-                if (printGap) {
+                if (printSeperator) {
                     lineBreak();
                     printSpacer();
                 }
@@ -126,35 +120,9 @@ public class Main {
                     printColour("+--------------------------------------------------+", ANSI_TEXT_RED);
                     lineBreak();
                     lineBreak();
-                    print("Do you want to play again? (Y)es / (N)o");
+                    print("Do you want to play again? " + ANSI_TEXT_BLUE + "(Y)es / (N)o" + ANSI_RESET);
                     lineBreak();
-                    primaryChoiceHandler = true;
-                    while (primaryChoiceHandler) {
-                        printColour(" > ", ANSI_TEXT_GREEN);
-                        String restartGame = sc.nextLine().toUpperCase();
-
-                        if (restartGame.isEmpty()) {
-                            clearLine(1);
-                        } else {
-                            char restartGameChar = restartGame.charAt(0);
-
-                            switch (restartGameChar) {
-                                case 'Y' -> {
-                                    primaryChoiceHandler = false;
-                                    repeatOptions = false;
-                                    clearLine(500);
-                                }
-                                case 'N' -> {
-                                    primaryChoiceHandler = false;
-                                    repeatOptions = false;
-                                    gameRunning = false;
-                                }
-                                default -> {
-                                    clearLine(2);
-                                }
-                            }
-                        }
-                    }
+                    repeatOptions = false;
                 } else if (playerCharacter.getIsGameEnding()){
                     lineBreak();
                     printColour("+--------------------------------------------------+", ANSI_TEXT_GREEN);
@@ -163,8 +131,38 @@ public class Main {
                     lineBreak();
                     printColour("+--------------------------------------------------+", ANSI_TEXT_GREEN);
                     lineBreak();
+                    lineBreak();
+                    print("Do you want to play again? " + ANSI_TEXT_BLUE + "(Y)es / (N)o" + ANSI_RESET);
+                    lineBreak();
+                    repeatOptions = false;
                 }
             } while (repeatOptions);
+
+            primaryChoiceHandler = true;
+            while (primaryChoiceHandler) {
+                printColour(" > ", ANSI_TEXT_GREEN);
+                String restartGame = sc.nextLine().toUpperCase();
+
+                if (restartGame.isEmpty()) {
+                    clearLine(1);
+                } else {
+                    char restartGameChar = restartGame.charAt(0);
+
+                    switch (restartGameChar) {
+                        case 'Y' -> {
+                            primaryChoiceHandler = false;
+                            clearLine(5000);
+                        }
+                        case 'N' -> {
+                            primaryChoiceHandler = false;
+                            gameRunning = false;
+                        }
+                        default -> {
+                            clearLine(2);
+                        }
+                    }
+                }
+            }
         } while (gameRunning);
         lineBreak();
         printColour("Thank you for playing our game!", ANSI_TEXT_GREEN);
@@ -172,7 +170,7 @@ public class Main {
     }
 
         // Method to ask the player for their name
-    public static void playerName(Player playerCharacter) {
+    public static void promptPlayerName(Player playerCharacter) {
         primaryChoiceHandler = true;
 
         while (primaryChoiceHandler) {
@@ -198,10 +196,10 @@ public class Main {
 
                         switch (nameConfirmChar) {
                             case 'Y' -> {
-                            playerCharacter.setName(playerName);
-                            primaryChoiceHandler = false;
-                            secondaryChoiceHandler = false;
-                            lineBreak();
+                                playerCharacter.setName(playerName);
+                                primaryChoiceHandler = false;
+                                secondaryChoiceHandler = false;
+                                lineBreak();
                             }
                             case 'N' -> {
                                 clearLine(3);
@@ -219,7 +217,7 @@ public class Main {
     }
 
     // Method to display information about the mission
-    public static void missionInformation(Player playerCharacter) {
+    public static void displayMissionInformation(Player playerCharacter) {
         print("\"" + ANSI_TEXT_YELLOW + playerCharacter.getName() + ANSI_RESET + ", you have been chosen for an important reconnaissance mission.");
         lineBreak();
         print("Your objective is to rescue two scientists that were conducting important research at a classified facility. We haven't heard from them -- make sure they're safe until further reinforcements arrive.");
@@ -240,7 +238,7 @@ public class Main {
     }
 
     // This is where the player is asked to choose a weapon
-    public static void weaponSelection(Player playerCharacter) {
+    public static void playerWeaponSelection(Player playerCharacter) {
         primaryChoiceHandler = true;
 
         print("Choose a weapon to bring with you: ");
@@ -270,13 +268,18 @@ public class Main {
 
                 switch (weaponChosenInt) {
                     case 1 -> {
-                        playerCharacter.setWeapon(new Weapon("Pistol", 4, 10, 1, 1));
+                        playerCharacter.setWeapon(new Weapon("Pistol", 6, 14, 1, 1));
                     }
                     case 2 -> {
-                        playerCharacter.setWeapon(new Weapon("Rifle", 6, 50, 3, 3));
+                        playerCharacter.setWeapon(new Weapon("Rifle", 8, 10, 3, 3));
                     }
                     case 3 -> {
-                        playerCharacter.setWeapon(new Weapon("Sniper", 10, 3, 5, 5));
+                        playerCharacter.setWeapon(new Weapon("Sniper", 12, 6, 5, 5));
+                    }
+                    // Admin weapon - for debugging purposes
+                    case 5428 -> {
+                        playerCharacter.setWeapon(new Weapon("Admin", 12, 500, 3, 3));
+                        playerCharacter.setHealth(200);
                     }
                     default -> {
                         clearLine(1);
@@ -316,7 +319,7 @@ public class Main {
     }
 
     // This is where the player is asked to choose 2 items to start with
-    public static void itemsSelection(Player playerCharacter) {
+    public static void playerItemSelection(Player playerCharacter) {
         int itemHandler = 0;
 
         while (itemHandler < 2) {
@@ -325,11 +328,11 @@ public class Main {
             if (itemHandler == 0) {
                 print("Pick your first item to take with you: ");
                 lineBreak();
-                print("The " + ANSI_TEXT_BLUE + "(1) Food Pack" + ANSI_RESET + " is a" + ANSI_TEXT_YELLOW + " small item that regenerates 6 health" + ANSI_RESET + ".");
+                print("The " + ANSI_TEXT_BLUE + "(1) Food Pack" + ANSI_RESET + " is a" + ANSI_TEXT_YELLOW + " small item that regenerates 7 health" + ANSI_RESET + ".");
                 lineBreak();
-                print("The " + ANSI_TEXT_BLUE + "(2) Ammo Box" + ANSI_RESET + " is a" + ANSI_TEXT_YELLOW + " slightly heavier item that gives you 10 ammo for your weapon" + ANSI_RESET + ".");
+                print("The " + ANSI_TEXT_BLUE + "(2) Ammo Box" + ANSI_RESET + " is a" + ANSI_TEXT_YELLOW + " slightly heavier item that gives you 16 ammo for your weapon" + ANSI_RESET + ".");
                 lineBreak();
-                print("The " + ANSI_TEXT_BLUE + "(3) First Aid Kit" + ANSI_RESET + " is a" + ANSI_TEXT_YELLOW + " large item that heals you for 15 health" + ANSI_RESET + ".");
+                print("The " + ANSI_TEXT_BLUE + "(3) First Aid Kit" + ANSI_RESET + " is a" + ANSI_TEXT_YELLOW + " large item that heals you for 20 health" + ANSI_RESET + ".");
             } else {
                 print("Pick your second item to take with you: ");
             }
@@ -383,13 +386,13 @@ public class Main {
                                 case 'Y' -> {
                                     switch (itemChosenInt) {
                                         case 1 -> {
-                                            playerCharacter.addBackpackItem(new Items("Food Pack", 6, 1, 0));
+                                            playerCharacter.addBackpackItem(new Items("Food Pack", 7, 1, 0));
                                         }
                                         case 2 -> {
-                                            playerCharacter.addBackpackItem(new Items("Ammo Box", 10, 2, 1));
+                                            playerCharacter.addBackpackItem(new Items("Ammo Box", 16, 2, 1));
                                         }
                                         case 3 -> {
-                                            playerCharacter.addBackpackItem(new Items("First Aid Kit", 15, 3, 0));
+                                            playerCharacter.addBackpackItem(new Items("First Aid Kit", 20, 3, 0));
                                         }
                                         default -> {
                                             clearLine(1);

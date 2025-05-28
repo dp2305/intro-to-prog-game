@@ -21,20 +21,20 @@ public class Items {
    }
 
    public static void useItem(Player player) {
-      boolean validChoiceHandler = true;
+      boolean isValidChoice = true;
       Weapon weapon = player.getWeapon();
-      int backpackSize = player.showBackpack().split("\n").length;
+      int backpackSize = player.displayBackpackContents().split("\n").length;
 
       // If the player has no items in their backpack, print a message and exit the method
-      if (player.showBackpack().isEmpty()) {
+      if (player.displayBackpackContents().isEmpty()) {
          print("You have no items in your backpack.");
          lineBreak();
-         validChoiceHandler = false;
+         isValidChoice = false;
       } else {
-         print("What item would you like to use? \n" + ANSI_TEXT_BLUE + "(0) Go Back \n" + player.showBackpack() + ANSI_RESET);
+         print("What item would you like to use? \n" + ANSI_TEXT_BLUE + "(0) Go Back \n" + player.displayBackpackContents() + ANSI_RESET);
       }
 
-      while (validChoiceHandler) {
+      while (isValidChoice) {
          printColour(" > ", ANSI_TEXT_GREEN);
          String itemChoice = sc.nextLine();
 
@@ -47,12 +47,12 @@ public class Items {
             try {
                itemIndex = Character.getNumericValue(itemChoice.charAt(0));
             } catch (NumberFormatException e) {
-               clearLine(itemIndex);
+               clearLine(1);
             }
 
             if (itemIndex == 0) {
                // User chose to go back
-               validChoiceHandler = false;
+               isValidChoice = false;
             } else if (itemIndex > 0 && itemIndex <= backpackSize) {
                // Valid item index
                try {
@@ -97,7 +97,7 @@ public class Items {
                   }
                   lineBreak();
 
-                  validChoiceHandler = false;
+                  isValidChoice = false;
                } catch (IndexOutOfBoundsException e) {
                   clearLine(1);
                }

@@ -15,7 +15,7 @@ public class Player {
     private boolean isAlive;
     private boolean isFighting;
     private boolean isGameEnding;
-    private static boolean firstNPCEncounter = true;
+    private static boolean isFirstNPCEncounter = true;
     private final ArrayList<Items> backpack = new ArrayList<>(); // Use an arraylist to handle items being added and removed from the backpack
 
     // All available fragments
@@ -37,26 +37,31 @@ public class Player {
         this.isAlive = isAlive;
     }
 
-    public String showBackpack() {
+    // Display the player's backpack contents
+    public String displayBackpackContents() {
         String backpackString = "";
         for (Items item : backpack) {
-            backpackString += String.format("(%d) %s\n", backpack.indexOf(item) + 1, item.getName());
+            backpackString += String.format(" - (%d) %s\n", backpack.indexOf(item) + 1, item.getName());
         }
         return backpackString;
     }
 
+    // Add an item to the player's backpack
     public void addBackpackItem(Items item) {
         backpack.add(item);
     }
 
+    // Remove an item from the player's backpack
     public void removeBackpackItem(Items item) {
         backpack.remove(item);
     }
 
+    // Get an item from the player's backpack by index
     public Items getBackpackItem(int index) {
         return backpack.get(index);
     }
 
+    // Get an item from the player's backpack by name
     public Items getBackpackItem(String name) {
         for (Items item : backpack) {
             if (item.getName().equals(name)) {
@@ -68,11 +73,11 @@ public class Player {
 
     public static void rest(Player player) {
         if (player.getHealth() >= 45) {
-            print("You are can't rest, you are already at full health.");
+            print("You can't rest, you are already at full health.");
         } else {
             // If player has rested in the same location, they can't rest again
             if (Navigation.getRestedLocations()) {
-                print("You were unable rest at this location again.");
+                print("You were unable to rest at this location again.");
             } else {
                 boolean canRest = random.nextBoolean();
 
@@ -85,12 +90,13 @@ public class Player {
                 }
 
                 // Sets restedLocation to false so player cannot rest again
-                Navigation.UpdateRestedLocations();
+                Navigation.updateRestedLocations();
             }
         }
         lineBreak();
     }
 
+    // Display the player stats, and what they are carrying
     public static void checkCharacter(Player player) {
         print("You have " + player.getHealth() + " health.");
         lineBreak();
@@ -100,25 +106,26 @@ public class Player {
             print("You are carrying a " + player.getWeapon().getName() + " with " + player.getWeapon().getAmmo() + " ammo.");
         }
         lineBreak();
-        if (player.showBackpack().isEmpty()) {
+        if (player.displayBackpackContents().isEmpty()) {
             print("You are carrying no items.");
         } else {
-            print("You are carrying the following items: \n" + player.showBackpack());
+            print("You are carrying the following items: \n" + player.displayBackpackContents());
         }
     }
 
+    // Search the player's  current location for items
     public static void search(Player player) {
         switch (Navigation.getLocationSearchIndex()) {
             case 0 -> print("You looked around but couldn't find anything useful.");
             case 1 -> {
-                int searchChance = random.nextInt();
+                int searchChance = random.nextInt(100);
                 if (searchChance < 33) {
                     int itemIndex = random.nextInt(4); // 0-3 for 4 items
-                    Items itemPool[] = {
-                        new Items("Bundle of Rotten Fruit", 2, 1, 0),
-                        new Items("Pack of Pain Killers", 5, 1, 0),
-                        new Items("Handful of Loose Ammo", 3, 1, 1),
-                        new Items("Used Magazine", 8, 1, 1),
+                    Items[] itemPool = {
+                        new Items("Bundle of Rotten Fruit", 3, 1, 0),
+                        new Items("Pack of Pain Killers", 6, 1, 0),
+                        new Items("Handful of Loose Ammo", 5, 1, 1),
+                        new Items("Used Magazine", 10, 1, 1),
                     };
 
                     Items randomItem = itemPool[itemIndex];
@@ -146,30 +153,32 @@ public class Player {
                 fragments.remove(randomFragment);
             }
             case 3 -> {
-                if (firstNPCEncounter) {
-                    print("\"You must be here to help us, right?\"");
+                // If its the first encounter with the NPC, print the NPC's dialogue
+                if (isFirstNPCEncounter) {
+                    print("\"" + ANSI_TEXT_YELLOW + player.getName() + ANSI_RESET + ", you must be here to help us, right?\"");
                     lineBreak();
-                    print("\"We've been waiting for you. I'm Victor, my partners in another room unconcious.\"");
+                    print("\"" + ANSI_TEXT_YELLOW + player.getName() + ANSI_RESET + ", we've been waiting for you. I'm Victor, my partners in another room unconcious.\"");
                     lineBreak();
-                    print("\"I've been trying to get into the vault, but I'm missing the fragments required to open it and I can't get past the security system.\"");
+                    print("\"I've been trying to get into the vault, but " + ANSI_TEXT_YELLOW + "I'm missing the fragments required to open it" + ANSI_RESET + " and I wasn't able to get past the security system.\"");
                     lineBreak();
-                    print("\"Have you find the fragments by any chance?\"");
+                    print("\"Have you found the fragments by any chance?\"");
                     lineBreak();
                     lineBreak();
-                    firstNPCEncounter = false;
+                    isFirstNPCEncounter = false;
                 }
                 int fragmentCount = 0;
-                int backpackSize = player.showBackpack().split("\n").length;
+                int backpackSize = player.displayBackpackContents().split("\n").length;
 
                 for (int i = 0; i < backpackSize; i++) {
-                Items item = player.getBackpackItem(i);
+                    Items item = player.getBackpackItem(i);
 
-                // type 2 = story items
-                if (item.getType() == 2) {
+                    // type 2 = story items
+                    if (item.getType() == 2) {
                         fragmentCount++;
                     }
                 }
 
+                // If the player doesn't have all 9 fragments, tell them how many are missing
                 if (fragmentCount < 9) {
                     print("\"It seems like you still need to find " + ANSI_TEXT_YELLOW + (9 - fragmentCount) + " fragments" + ANSI_RESET + ".\"");
                 } else {
@@ -180,6 +189,7 @@ public class Player {
                 }
             }
             case 9 -> {
+                // The the player that they have already searched this location
                 print("You've already searched this location, theres nothing here.");
             }
             default -> {
@@ -191,6 +201,7 @@ public class Player {
         lineBreak();
     }
 
+    // Calculate the player's weight
     public void calculatePlayerWeight() {
         weight = 0;
         weight = weight + weapon.getWeight();
