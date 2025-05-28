@@ -7,198 +7,289 @@ public class Combat {
 
     public static final Scanner sc = new Scanner(System.in);
     private static final Random random = new Random();
+    public static boolean alive;
 
-    public static void combat(Player player, int enemyCount) {
-        int enemySelection = random.nextInt(8);
-        int weaponSelection = random.nextInt(3);
+    public static void combat(Player player) {
+        alive = true;
 
-        final int MAX_AMMO = 1000000;
+        while (alive && player.getHealth() > 0) {
+            // All Enemies
+            Enemy[] enemies = {
+                new Enemy("Snake",            7),
+                new Enemy("Raven",            10),
+                new Enemy("Vulture",          10),
+                new Enemy("Wolf",             15),
+                new Enemy("Wild Boar",        20),
+                new Enemy("Bear",             30),
+                new Enemy("Sabretooth Tiger", 30)
+            };
 
-        // Enemies
-        Enemy[] enemies = {
-                new Enemy("Snake",            5, 1),
-                new Enemy("Raven",            5, 2),
-                new Enemy("Vulture",          5, 3),
-                new Enemy("Wolf",             10, 3),
-                new Enemy("Wild Boar",        15, 5),
-                new Enemy("Bear",             20, 8),
-                new Enemy("Sabretooth Tiger", 20, 10)
-        };
+            // All Enemy Attacks
+            // Snake Attacks
+            Attacks[] snakeAttacks = {
+                new Attacks("Bite", 2),
+                new Attacks("Coil", 3),
+                new Attacks("Poison", 4)
+            };
 
-        // Enemy Attacks
+            // Raven Attacks
+            Attacks[] ravenAttacks = {
+                new Attacks("Beak", 2),
+                new Attacks("Charge", 2),
+                new Attacks("Talons", 4)
+            };
 
-        // Snake Attacks
-        Weapon[] snakeWeapons = {
-                new Weapon("Bite", 2, MAX_AMMO, 2, 1),
-                new Weapon("Coil", 3, MAX_AMMO, 1, 1),
-                new Weapon("Poison", 4, MAX_AMMO, 1, 1)
-        };
+            // Vulture Attacks
+            Attacks[] vultureAttacks = {
+                new Attacks("Beak", 3),
+                new Attacks("Charge", 3),
+                new Attacks("Talons", 5)
+            };
 
-        // Raven Attacks
-        Weapon[] ravenWeapons = {
-                new Weapon("Beak", 2, MAX_AMMO, 1, 1),
-                new Weapon("Charge", 2, MAX_AMMO, 2, 1),
-                new Weapon("Talons", 4, MAX_AMMO, 1, 1)
-        };
+            // Wolf Attacks
+            Attacks[] wolfAttacks = {
+                new Attacks("Headbutt", 2),
+                new Attacks("Claws", 3),
+                new Attacks("Bite", 4)
+            };
 
-        // Vulture Attacks
-        Weapon[] vultureWeapons = {
-                new Weapon("Beak", 3, MAX_AMMO, 2, 1),
-                new Weapon("Charge", 3, MAX_AMMO, 2, 1),
-                new Weapon("Talons", 5, MAX_AMMO, 1, 1)
-        };
+            // Wild Boar Attacks
+            Attacks[] wildBoarAttacks = {
+                new Attacks("Kick", 4),
+                new Attacks("Charge", 5),
+                new Attacks("Ram", 6)
+            };
 
-        // Wolf Attacks
-        Weapon[] wolfWeapons = {
-                new Weapon("Headbutt", 2, MAX_AMMO, 2, 1),
-                new Weapon("Claws", 3, MAX_AMMO, 1, 1),
-                new Weapon("Bite", 4, MAX_AMMO, 1, 1)
-        };
+            // Bear Attacks
+            Attacks[] bearAttacks = {
+                new Attacks("Punch", 4),
+                new Attacks("Kick", 5),
+                new Attacks("Hug", 6)
+            };
 
-        // Wild Boar Attacks
-        Weapon[] wildBoarWeapons = {
-                new Weapon("Kick", 4, MAX_AMMO, 2, 1),
-                new Weapon("Charge", 5, MAX_AMMO, 2, 1),
-                new Weapon("Ram", 6, MAX_AMMO, 1, 1)
-        };
+            // Sabretooth Tiger Attacks
+            Attacks[] sabretoothTigerAttacks = {
+                new Attacks("Headbutt", 4),
+                new Attacks("Bite", 5),
+                new Attacks("Claws", 7)
+            };
 
-        // Bear Attacks
-        Weapon[] bearWeapons = {
-                new Weapon("Punch", 4, MAX_AMMO,2, 1),
-                new Weapon("Kick", 5, MAX_AMMO, 2, 1),
-                new Weapon("Hug", 6, MAX_AMMO, 1, 1)
-        };
+            // Variables for combat
+            int playerAttackRoll, enemyAttackRoll;
+            boolean continueFighting;
+            boolean triedToFlee = false;
 
-        // Sabretooth Tiger Attacks
-        Weapon[] sabretoothTigerWeapons = {
-                new Weapon("Headbutt", 4, MAX_AMMO, 2, 1),
-                new Weapon("Bite", 5, MAX_AMMO, 2, 1),
-                new Weapon("Claws", 7, MAX_AMMO, 1, 1)
-        };
+            int encounterChance = random.nextInt(100);
+            int enemyCount; // The number of enemies in the encounter
+            int fightCount = 0; // The number of enemies the player has defeated
+            int fleeCount = 0; // The number of times the player has fled an encounter
 
-        // All enemy weapons
-        Weapon[] enemyWeapons = {
-                snakeWeapons[weaponSelection],
-                ravenWeapons[weaponSelection],
-                vultureWeapons[weaponSelection],
-                wolfWeapons[weaponSelection],
-                wildBoarWeapons[weaponSelection],
-                bearWeapons[weaponSelection],
-                sabretoothTigerWeapons[weaponSelection]
-        };
-
-        int playerAttackRoll, enemyAttackRoll;
-        boolean continueFighting, fleeFighting;
-
-        // Set Enemy outside of while loop so it doesn't change every fight
-        Enemy enemy = enemies[enemySelection];
-
-        int fightCount = 0;
-
-        while (fightCount < enemyCount) {
-            continueFighting = true;
-
-            while (continueFighting) {
-                // Enemy weapons need to be set every fight
-                enemy.setWeapon(enemyWeapons[weaponSelection]);
-
-                // Variance in damage for attacks
-                int damageVariance = random.nextInt(7) - 3; // Randomise damage with variance of -3 to 3
-                int rangeEffect = 3 - player.getWeapon().getRange(); // Make weapon range effect damage, low range = more damage
-
-                int totalDamageEffect = damageVariance + rangeEffect;
-
-                print("You have " + ANSI_TEXT_BLUE + player.getHealth() + ANSI_RESET + " health left.");
+            if (encounterChance < 60 + (2 * player.getWeight())) {
+                enemyCount = random.nextInt(Navigation.getPossibleEncounters()) + 1;
+                printColour(" <=-- Combat --=>", ANSI_TEXT_YELLOW);
                 lineBreak();
-                print("What would you like to do?" + ANSI_TEXT_BLUE + "(1) Fight, (2) Run" + ANSI_RESET);
-                lineBreak();
-                printColour(" > ", ANSI_TEXT_GREEN);
 
-                String choice = sc.nextLine().toUpperCase();
-
-                if (choice.isEmpty()) {
-                    clearLine(1);
-                    continue;
+                if (enemyCount == 1) {
+                    print("You have encountered an enemy!");
                 } else {
-                    char choiceChar = choice.charAt(0);
+                    print("You have encountered " + enemyCount + " enemy!");
+                }
+            } else {
+                print("You did not encounter anything dangerous.");
+                lineBreak();
+                break; // Exit the loop if no encounter
+            }
+            lineBreak();
 
-                    switch (choiceChar) {
-                        case '1' -> {
-                            // Player attack
-                            print("You attempted to attack the " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + ".");
-                            lineBreak();
-                            playerAttackRoll = random.nextInt(6) + 1; // 1-6 instead of 0-5
+            while (fightCount < enemyCount) {
+                continueFighting = true;
 
-                            if (playerAttackRoll <= 1) {
-                                print("You failed to attack the " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + ".");
-                                lineBreak();
-                            } else {
-                                print("You hit the " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + " for " + ANSI_TEXT_YELLOW + (player.getWeapon().getDamage() + totalDamageEffect) + ANSI_RESET + " damage.");
-                                lineBreak();
-                                enemy.setHealth(enemy.getHealth() - (player.getWeapon().getDamage() + totalDamageEffect));
-                            }
+                // Selects an index for a random enemy every time a new fightr begins
+                int enemySelection = random.nextInt(7); // 0 to 6, since there are 7 enemy types
 
-                            if (enemy.getHealth() > 0) {
-                                print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + " now has " + ANSI_TEXT_YELLOW + enemy.getHealth() + ANSI_RESET + " health.");
-                                lineBreak();
-                                print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET  + " attempted to attack you with its " + ANSI_TEXT_YELLOW + enemy.getWeapon().getName() + ANSI_RESET + ".");
-                                lineBreak();
-                                enemyAttackRoll = random.nextInt(6) + 1;
+                // Set random Enemy based on random index outside of the main while loop so it doesn't change every fight
+                Enemy enemy = enemies[enemySelection];
 
-                                if (enemyAttackRoll <= 1) {
-                                    print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + " failed to attack you." );
+                print("You're fighting a " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + ".");
+                lineBreak();
+
+                while (continueFighting) {
+                    // Select a random attack for the selected enemy
+                    int weaponSelection = random.nextInt(3); // 0 to 2, since each enemy has 3 attacks
+
+                    // All enemy weapons
+                    Attacks[] enemyAttacks = {
+                        snakeAttacks[weaponSelection],
+                        ravenAttacks[weaponSelection],
+                        vultureAttacks[weaponSelection],
+                        wolfAttacks[weaponSelection],
+                        wildBoarAttacks[weaponSelection],
+                        bearAttacks[weaponSelection],
+                        sabretoothTigerAttacks[weaponSelection]
+                    };
+
+                    enemy.setAttack(enemyAttacks[enemySelection]);
+
+                    // Variance in damage for attacks
+                    int playerDamageVariance = random.nextInt(6) - 3; // Randomise damage with a variance of -3 to 2
+                    int enemyDamageVariance = random.nextInt(4) - 1; // Randomise damage with a variance of -1 to 3
+
+                    int totalPlayerDamage = player.getWeapon().getDamage() + playerDamageVariance;
+                    int totalEnemyDamage = enemy.getAttack().getDamage() + enemyDamageVariance;
+
+                    print("You have " + ANSI_TEXT_YELLOW + player.getHealth() + ANSI_RESET + " health.");
+                    lineBreak();
+                    print("What would you like to do? " + ANSI_TEXT_BLUE + "(1) Fight, (2) Run, (3) Use Item" + ANSI_RESET);
+                    lineBreak();
+                    printColour(" > ", ANSI_TEXT_GREEN);
+                    String choice = sc.nextLine().toUpperCase();
+
+                    if (choice.isEmpty()) {
+                        clearLine(3);
+                        continue;
+                    } else {
+                        char choiceChar = choice.charAt(0);
+
+                        switch (choiceChar) {
+                            // Attack sequenbce
+                            case '1' -> {
+                                // Player attack
+                                print("You attempted to attack the " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + ".");
+                                lineBreak();
+                                playerAttackRoll = random.nextInt(6) + 1; // 1-6 instead of 0-5
+
+                                if (player.getWeapon().getAmmo() <= 0) {
+                                    // Search for an ammo item in the player's backpack
+                                    boolean foundAmmo = false;
+                                    int backpackSize = player.showBackpack().split("\n").length;
+                                    for (int i = 0; i < backpackSize; i++) {
+                                        Items item = player.getBackpackItem(i);
+                                        if (item.getType() == 1) { // type 1 = ammo
+                                            player.getWeapon().setAmmo(player.getWeapon().getAmmo() + item.getValue());
+                                            print("You were out of ammo. You quickly used the " + ANSI_TEXT_YELLOW + item.getName() + ANSI_RESET + " and added " + ANSI_TEXT_YELLOW + item.getValue() + " ammo to your " + player.getWeapon().getName() + ANSI_RESET + ".");
+                                            player.removeBackpackItem(item);
+                                            foundAmmo = true;
+                                            break;
+                                        }
+                                    }
+                                    if (!foundAmmo) {
+                                        print("You ran out of ammo... ");
+                                        continueFighting = false;
+                                        alive = false;
+                                        fightCount = 100;
+                                        break;
+                                    }
                                     lineBreak();
+                                }
+
+                                // Player attack sequence - failed to attack, attacked successfully
+                                if (playerAttackRoll <= 1) {
+                                    print("Your attack missed the " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + ".");
                                 } else {
+                                    print("You hit the " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + " for " + ANSI_TEXT_YELLOW + totalPlayerDamage + ANSI_RESET + " damage.");
+                                    enemy.setHealth(enemy.getHealth() - (totalPlayerDamage));
+                                }
+                                lineBreak();
+
+                                player.getWeapon().setAmmo(player.getWeapon().getAmmo() - 1);
+
+                                // Enemy attack sequence - failed to attack, attacked successfully - only run sequence if the enemy still has health
+                                if (enemy.getHealth() > 0) {
                                     print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + " has " + ANSI_TEXT_YELLOW + enemy.getHealth() + ANSI_RESET + " health.");
                                     lineBreak();
-                                    player.setHealth(player.getHealth() - (enemy.getWeapon().getDamage() + damageVariance));
+                                    print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET  + " attempted to attack you with its " + ANSI_TEXT_YELLOW + enemy.getAttack().getName() + ANSI_RESET + ".");
+                                    lineBreak();
+                                    enemyAttackRoll = random.nextInt(6) + 1; // 1-6 instead of 0-5
+
+                                    if (enemyAttackRoll <= 1) {
+                                        print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + " couldn't hit you." );
+                                    } else {
+                                        print("You got hit for " + ANSI_TEXT_YELLOW + totalEnemyDamage + ANSI_RESET + " damage.");
+                                        player.setHealth(player.getHealth() - totalEnemyDamage);
+                                    }
+                                    lineBreak();
                                 }
                             }
-                        }
+                            // Player flee sequence
+                            case '2' -> {
+                                int fleeFightChance;
 
-                        case '2' -> {
-                            fleeFighting = random.nextBoolean();
-                            if (fleeFighting) {
-                                print("You escaped successfully. Continue your mission.");
-                                lineBreak();
-                                continueFighting = false;
-                            } else {
-                                print("You failed to escape, the battle continues.");
-                                lineBreak();
-                                print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + " has " + ANSI_TEXT_YELLOW + enemy.getHealth() + ANSI_RESET + " health.");
-                                lineBreak();
-                                print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + " attempted to hit you.");
-                                lineBreak();
-                                enemyAttackRoll = random.nextInt(6) + 1;
-
-                                if (enemyAttackRoll <= 1) {
-                                    print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + " failed to attack you.");
-                                    lineBreak();
+                                // If the encounter has more than 1 enemy, the player cannot flee
+                                if (triedToFlee) {
+                                    print("You've already tried to flee and failed, continue fighting.");
                                 } else {
-                                    print("You get hit for " + ANSI_TEXT_YELLOW + enemy.getWeapon().getDamage() + damageVariance + ANSI_RESET + " damage.");
-                                    lineBreak();
-                                    player.setHealth(player.getHealth() - (enemy.getWeapon().getDamage() + damageVariance));
+                                    if (enemyCount > 1) {
+                                        print("You cannot flee during an encounter with multiple enemies.");
+                                        // Manually set Flee Fighting
+                                        fleeFightChance = 0;
+                                    } else {
+                                        // Otherwise a random number out of 100 is generated
+                                        fleeFightChance = random.nextInt(100);
+                                    }
+
+                                    if (fleeFightChance < 50 - fleeCount) {
+                                        // 20 < 50
+                                        print("You managed to escape successfully. Continue your mission.");
+                                        if (fleeCount != 30) {
+                                            fleeCount+=10;
+                                        }
+                                        fightCount = 100;
+                                        continueFighting = false;
+                                    } else {
+                                        print("You failed to escape, the battle continues.");
+                                        lineBreak();
+                                        print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + " has " + ANSI_TEXT_YELLOW + enemy.getHealth() + ANSI_RESET + " health.");
+                                        lineBreak();
+                                        print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET  + " attempted to attack you with its " + ANSI_TEXT_YELLOW + enemy.getAttack().getName() + ANSI_RESET + ".");
+                                        lineBreak();
+                                        enemyAttackRoll = random.nextInt(6) + 1; // 1-5 instead of 0-5
+
+                                        if (enemyAttackRoll <= 1) {
+                                            print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + " failed to attack you.");
+                                        } else {
+                                            print("You got hit for " + ANSI_TEXT_YELLOW + totalEnemyDamage + ANSI_RESET + " damage.");
+                                            player.setHealth(player.getHealth() - totalEnemyDamage);
+                                        }
+                                    }
+                                    triedToFlee = true;
                                 }
+                                lineBreak();
+                            }
+                            // Player uses item
+                            case '3' -> {
+                                Items.useItem(player);
+                            }
+                            default -> {
+                                clearLine(3);
                             }
                         }
-                        default -> {
-                            clearLine(1);
+                    }
+
+                    if (player.getHealth() <= 0) {
+                        continueFighting = false;
+                        alive = false;
+                        fightCount = 100;
+                    }
+
+                    if (enemy.getHealth() <= 0) {
+                        continueFighting = false;
+                        fightCount++;
+                        if (fightCount >= enemyCount) {
+                            print("You survived this encounter, continue your mission.");
+                            lineBreak();
+                            break;
+                        } else {
+                            print("You survived this enemy, watch out for the next one.");
+                            lineBreak();
                         }
                     }
                 }
-
-                if (player.getHealth() <= 0) {
-                    print("You failed to rescue the scientists, game over.");
-                    continueFighting = false;
-                    fightCount = 10;
-                }
-
-                if (enemy.getHealth() <= 0) {
-                    continueFighting = false;
-                    fightCount++;
-                    print("You survived this encounter, continue the mission.");
-                }
+                lineBreak();
+            }
+            if (fightCount >= enemyCount) {
+                break;
             }
         }
+        alive = false;
     }
 }

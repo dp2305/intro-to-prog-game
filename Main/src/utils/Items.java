@@ -10,7 +10,7 @@ public class Items {
    private String name;
    private int value; // Value is what the item provides, eg. for ammo, it is the number of bullets, for healing items, it is the amount of health it heals
    private int weight;
-   private int type; // Type is the type of item, eg. healing (0), ammo (1)
+   private int type; // Type is the type of item, eg. healing (0), ammo (1), story (2)
 
    // Constructor to initialize an item with a name, value, and weight.
    public Items(String name, int value, int weight, int type) {
@@ -57,26 +57,51 @@ public class Items {
                // Valid item index
                try {
                   Items item = player.getBackpackItem(itemIndex - 1);
-                  if (item.getType() == 0) {
-                     // If player will over heal from item, don't allow healing
-                     if (player.getHealth() + item.getValue() > 55) {
-                        clearLine(5);
-                        print("You can't use the " + ANSI_TEXT_YELLOW + item.getName() + ANSI_RESET + " yet.");
-                        lineBreak();
-                        lineBreak();
-                        useItem(player);
-                     } else {
-                        player.setHealth(player.getHealth() + item.getValue());
-                        print("You used the " + ANSI_TEXT_YELLOW + item.getName() + ANSI_RESET + " and recovered " + ANSI_TEXT_YELLOW + item.getValue() + " health" + ANSI_RESET + ".");
+
+                  switch (item.getType()) {
+                     case 0 -> {
+                        // If player will over heal from item, don't allow healing
+                        if (player.getHealth() + item.getValue() > 55) {
+                              clearLine(7);
+                              print("You can't use the " + ANSI_TEXT_YELLOW + item.getName() + ANSI_RESET + " yet.");
+                              lineBreak();
+                              lineBreak();
+                              useItem(player);
+                        } else {
+                              player.setHealth(player.getHealth() + item.getValue());
+                              print("You used the " + ANSI_TEXT_YELLOW + item.getName() + ANSI_RESET + " and recovered " + ANSI_TEXT_YELLOW + item.getValue() + " health" + ANSI_RESET + ".");
+                              // Remove the item after using it
+                              player.removeBackpackItem(item);
+                        }
                      }
-                  } else if (item.getType() == 1) {
-                     weapon.setAmmo(weapon.getAmmo() + item.getValue());
-                     print("You used the " + ANSI_TEXT_YELLOW + item.getName() + ANSI_RESET + " and added " + ANSI_TEXT_YELLOW + item.getValue() + " ammo to your " + weapon.getName() + ANSI_RESET + ".");
+                     case 1 -> {
+                        // If the player uses a knife, then they can't use an ammo related
+                        if (player.getWeapon().getName().equals("Knife")) {
+                              print("You don't need ammo for a knife");
+                        } else {
+                              weapon.setAmmo(weapon.getAmmo() + item.getValue());
+                              print("You used the " + ANSI_TEXT_YELLOW + item.getName() + ANSI_RESET + " and added " + ANSI_TEXT_YELLOW + item.getValue() + " ammo to your " + weapon.getName() + ANSI_RESET + ".");
+                              // Remove the item after using it
+                              player.removeBackpackItem(item);
+                        }
+                     }
+                     case 2 -> {
+                        // Player can't use story related items during combat, but can use them outside of combat
+                        if (Combat.alive) {
+                           print("You cannot use this item right now.");
+                           lineBreak();
+                           useItem(player);
+                           return;
+                        } else {
+                           print("This " + ANSI_TEXT_YELLOW + "fragment" + ANSI_RESET + " says " + ANSI_TEXT_YELLOW + item.getValue() + ANSI_RESET + " on it.");
+                        }
+                     }
+                     default -> {
+                        clearLine(1);
+                     }
                   }
                   lineBreak();
 
-                  // Remove the item after using it
-                  player.removeBackpackItem(item);
                   validChoiceHandler = false;
                } catch (IndexOutOfBoundsException e) {
                   clearLine(1);

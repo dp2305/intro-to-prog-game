@@ -4,14 +4,12 @@ public class Weapon {
     private String name;
     private int damage;
     private int ammo;
-    private int range;
     private int weight;
 
-    public Weapon(String name, int damage, int ammo, int range, int weight) {
+    public Weapon(String name, int damage, int ammo, int weight) {
         this.name = name;
         this.damage = damage;
         this.ammo = ammo;
-        this.range = range;
         this.weight = weight;
     }
 
@@ -25,10 +23,6 @@ public class Weapon {
 
     public int getAmmo() {
         return ammo;
-    }
-
-    public int getRange() {
-        return range;
     }
 
     public int getWeight() {
@@ -45,10 +39,6 @@ public class Weapon {
 
     public void setAmmo(int ammo) {
         this.ammo = ammo;
-    }
-
-    public void setRange(int range) {
-        this.range = range;
     }
 
     public void setWeight(int weight) {

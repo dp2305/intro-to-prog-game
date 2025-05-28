@@ -1,11 +1,9 @@
 package utils;
-import java.util.Random;
 import java.util.Scanner;
 import static utils.Formatting.*;
 
 public class Navigation {
     private static final Scanner sc = new Scanner(System.in);
-    private static final Random random = new Random();
 
     // Player's current location and coordinates
     private static int currentLocation = 00;
@@ -14,20 +12,48 @@ public class Navigation {
 
     // Location names
     private static final String[] locationNames = {
-        "Base",            "Base",            "River",      "Destroyed Lab",  "Destroyed Lab",
-        "Base",            "Forest",          "River",      "Forest",         "Forest",
+        "Main Base",       "Main Base",       "River",      "Destroyed Lab",  "Destroyed Lab",
+        "Main Base",       "Forest",          "River",      "Burnt Forest",   "Burnt Forest",
         "Forest",          "Forest",          "River",      "River",          "Abandoned Camp",
         "Forest",          "Forest",          "Mountains",  "River",          "Mountains",
-        "Abandoned Camp",  "Abandoned Camp",  "Mountains",  "Mountains",      "Mountains"
+        "Abandoned Camp",  "Abandoned Camp",  "Caves",      "Mountains",      "Mountains"
     };
 
-    // Whether the player has visited the location
-    private static final boolean[] visitedLocations = {
-        true, false, false, false, false,
+    // Different boolean arrayes used to keep track of the 'features' at that location - player may have visited the location and searched it but did not encounter an enemy
+    // Whether the player has rested at the location
+    private static final boolean[] restedLocations = {
+        false, false, false, false, false,
         false, false, false, false, false,
         false, false, false, false, false,
         false, false, false, false, false,
         false, false, false, false, false
+    };
+
+    // Whether the location has searchable items - 0 = no items, 1 = searchable, 2 = story item search, 9 = already searched
+    private static final int[] locationSearchIndex = {
+        2, 1, 0, 2, 1,
+        1, 0, 0, 2, 0,
+        2, 0, 0, 0, 2,
+        0, 0, 0, 2, 0,
+        2, 1, 2, 0, 2
+    };
+
+    // Whether the location has a combat encounter
+    private static final boolean[] locationHasCombat = {
+        false, false, true, false, false,
+        false, true,  true, true,  true,
+        true,  true,  true, true,  true,
+        true,  true,  true, true,  true,
+        true,  true,  true, true,  true
+    };
+
+    // The maximum number of possible combat encounters at the location
+    private static final int[] possibleCombatEncounters = {
+        0, 0, 4, 0, 0,
+        0, 1, 4, 1, 1,
+        1, 1, 4, 4, 2,
+        2, 2, 2, 4, 2,
+        2, 2, 2, 2, 2
     };
 
     // Descriptions of the locations
@@ -61,24 +87,6 @@ public class Navigation {
         "The terrain is very rough. There might be something lurking here.",
         "The terrain is very rough. There might be something lurking here.",
         "The terrain is very rough. There might be something lurking here."
-    };
-
-    // Whether the location has combat
-    private static final boolean[] locationHasCombat = {
-        false, false, true, false, false,
-        false, true,  true, true,  true,
-        true,  true,  true, true,  true,
-        true,  true,  true, true,  true,
-        true,  true,  true, true,  true
-    };
-
-    // The maximum number of possible combat encounters at the location
-    private static final int[] possibleCombatEncounters = {
-        0, 0, 4, 0, 0,
-        0, 1, 4, 1, 1,
-        1, 1, 4, 4, 2,
-        1, 1, 2, 4, 2,
-        2, 2, 2, 2, 2
     };
 
     public static void navigate(Player player) {
@@ -166,37 +174,22 @@ public class Navigation {
                 clearLine(14);
                 map();
 
-
                 // Print the player's new location
                 print("You are now in the " + ANSI_TEXT_YELLOW + locationNames[characterLocationIndex] + ANSI_RESET + ". \"" + locationDescriptions[characterLocationIndex] + "\"");
                 lineBreak();
 
-
                 // Check if the location has combat and if the player has not visited it
-                if (locationHasCombat[characterLocationIndex] && !visitedLocations[characterLocationIndex]) {
-
-                    int encounterChance = random.nextInt(100);
-
-                    if (encounterChance < 66) {
-                        int enemyCount = random.nextInt(possibleCombatEncounters[characterLocationIndex]) + 1;
-                        print("You have encountered " + enemyCount + " enemies!");
-                        lineBreak();
-
-                        Combat.combat(player, enemyCount);
-                    } else {
-                        print("You did not encounter any enemies.");
-                        lineBreak();
-                    }
+                if (locationHasCombat[characterLocationIndex]) {
+                    Combat.combat(player);
+                    //  After the player has had a battle, combat for that location index is set to false
+                    locationHasCombat[characterLocationIndex] = false;
                 }
-
-                // Update the visited locations
-                visitedLocations[characterLocationIndex] = true;
             }
         }
     }
 
-    /*
-      public static void map() {
+    // Method to print a map based on the players location
+    public static void map() {
         // Calculate player's current location
         playerX = currentLocation % 5;
         playerY = currentLocation / 5;
@@ -218,40 +211,8 @@ public class Navigation {
         }
         System.out.println("+---+---+---+---+---+");
     }
-    */
-    public static void map() {
-        // Calculate player's current location
-        playerX = currentLocation % 5;
-        playerY = currentLocation / 5;
 
-        for (int y = 0; y < 5; y++) {
-            System.out.println("+---+---+---+---+---+");
-            for (int x = 0; x < 5; x++) {
-                System.out.print("| ");
-                int idx = y * 5 + x;
-                if (playerY == y && playerX == x) {
-                    printColour("P ", ANSI_TEXT_GREEN); // Player's current location
-                } else {
-                    // Get the first character of the area's name
-                    String areaName = locationNames[idx];
-                    char firstChar = Character.toUpperCase(areaName.charAt(0));
-                    // Optionally: color based on visited/unvisited
-                    if (visitedLocations[idx]) {
-                        printColour(firstChar + " ", ANSI_TEXT_YELLOW); // Visited
-                    } else {
-                        printColour(firstChar + " ", ANSI_TEXT_RED);    // Not visited
-                    }
-                }
-            }
-            System.out.println("|");
-        }
-        System.out.println("+---+---+---+---+---+");
-
-        System.out.println("Map Key:");
-        System.out.println("A - Abandoned Camp | B - Base | D - Destroyed Lab | F - Forest | M - Mountains | R - River");
-
-    }
-
+    // Different method to view the map as well as nearby locations
     public static void viewMap() {
         // Calculate the coordinates and relative index of the player's location
         playerX = currentLocation % 5;
@@ -283,11 +244,59 @@ public class Navigation {
         }
     }
 
-    public static void search(Player player) {
+    // Method to view the map related to the mission
+    public static void viewMissionMap() {
+        print("+---+---+---+---+---+");
+        lineBreak();
+        print("| " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |   |   | " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |   |");
+        lineBreak();
+        print("+---+---+---+---+---+");
+        lineBreak();
+        print("|   |   |   | " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |   |");
+        lineBreak();
+        print("+---+---+---+---+---+");
+        lineBreak();
+        print("| " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |   |   |   | " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |");
+        lineBreak();
+        print("+---+---+---+---+---+");
+        lineBreak();
+        print("|   |   |   | " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |   |");
+        lineBreak();
+        print("+---+---+---+---+---+");
+        lineBreak();
+        print("| " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |   | " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |   | " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |");
+        lineBreak();
+        print("+---+---+---+---+---+");
+        lineBreak();
 
     }
+    // To check if the player is at a certain loation
+    public static String getLocationName() {
+        return locationNames[characterLocationIndex];
+    }
 
-    public static boolean playerHasVisitedLocation() {
-        return visitedLocations[characterLocationIndex];
+    // To check if the player is able to rest at the lcoation
+    public static boolean getRestedLocations() {
+        return restedLocations[characterLocationIndex];
+    }
+
+    // To check if the played has searched the location
+    public static int getLocationSearchIndex() {
+        return locationSearchIndex[characterLocationIndex];
+    }
+
+    // To check the possible encounters the player can have at the location
+    public static int getPossibleEncounters() {
+        return possibleCombatEncounters[characterLocationIndex];
+    }
+
+    // Update the search index to indicate that it has already been searched
+    public static void updateLocationSearchIndex() {
+        locationSearchIndex[characterLocationIndex] = 9;
+    }
+
+    // Update the rested locations
+    public static void UpdateRestedLocations() {
+        restedLocations[characterLocationIndex] = false;
     }
 }
