@@ -246,6 +246,10 @@ public class Navigation {
             System.out.println("|");
         }
         System.out.println("+---+---+---+---+---+");
+
+        System.out.println("Map Key:");
+        System.out.println("A - Abandoned Camp | B - Base | D - Destroyed Lab | F - Forest | M - Mountains | R - River");
+
     }
 
     public static void viewMap() {
