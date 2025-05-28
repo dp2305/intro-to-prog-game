@@ -11,7 +11,7 @@
 4. Using items in different orders caused errors due to items shifting around in the inventory
 	- Discovered by Dutt
 	- Fixed by implementing a more reliable method for handling item
-5. Items found during a search weren't added to the backpack, making them unusuable
+5. Items found during a search weren't added to the backpack, making them unusable
 	- Discovered by Dutt
 	- Fixed by ensuring searched items are added to the backpack after the player searches for them
 6. Player damage output was doubled due to damage being added twice during combat
@@ -29,3 +29,12 @@
 10. After defeating an enemy, players couldn't encounter any enemies in other locations
 	- Discovered by Dutt
 	- Fixed by resetting the enemy encounter state after each battle
+11. Story items were unable to be 'used' as an option
+	- Discovered by Aditya
+	- Fixed by using a `boolean` on the the player instead using a `boolean` used for combat
+12. The player was still able to play the game after being defeated by an enemy
+	- Discovered by Kai
+	- Fixed by using a global variable in the `Combat` class instead of instantiating one every time the fight began
+13. Items selected at the start of the game were not being added to the backpack
+	- Discovered by Aditya
+	- Fixed by editing the `switch case` statement as it was still checking for `chars` instead of `ints`

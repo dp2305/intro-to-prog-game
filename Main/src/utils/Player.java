@@ -12,6 +12,10 @@ public class Player {
     private int health;
     private Weapon weapon;
     private int weight;
+    private boolean isAlive;
+    private boolean isFighting;
+    private boolean isGameEnding;
+    private static boolean firstNPCEncounter = true;
     private final ArrayList<Items> backpack = new ArrayList<>(); // Use an arraylist to handle items being added and removed from the backpack
 
     // All available fragments
@@ -27,10 +31,10 @@ public class Player {
         new Items("Fragment No. 9", 9, 0, 2)
     ));
 
-    public Player(String name, int health) {
-
+    public Player(String name, int health, boolean isAlive) {
         this.name = name;
         this.health = health;
+        this.isAlive = isAlive;
     }
 
     public String showBackpack() {
@@ -141,6 +145,40 @@ public class Player {
                 player.addBackpackItem(fragments.get(randomFragment));
                 fragments.remove(randomFragment);
             }
+            case 3 -> {
+                if (firstNPCEncounter) {
+                    print("\"You must be here to help us, right?\"");
+                    lineBreak();
+                    print("\"We've been waiting for you. I'm Victor, my partners in another room unconcious.\"");
+                    lineBreak();
+                    print("\"I've been trying to get into the vault, but I'm missing the fragments required to open it and I can't get past the security system.\"");
+                    lineBreak();
+                    print("\"Have you find the fragments by any chance?\"");
+                    lineBreak();
+                    lineBreak();
+                    firstNPCEncounter = false;
+                }
+                int fragmentCount = 0;
+                int backpackSize = player.showBackpack().split("\n").length;
+
+                for (int i = 0; i < backpackSize; i++) {
+                Items item = player.getBackpackItem(i);
+
+                // type 2 = story items
+                if (item.getType() == 2) {
+                        fragmentCount++;
+                    }
+                }
+
+                if (fragmentCount < 9) {
+                    print("\"It seems like you still need to find " + ANSI_TEXT_YELLOW + (9 - fragmentCount) + " fragments" + ANSI_RESET + ".\"");
+                } else {
+                    print("\"You did it! You got all 9 fragments!\"");
+                    lineBreak();
+                    print("\"Now we have access to the vault, we can stay there until the reinforcements come in.\"");
+                    player.setIsGameEnding(true);
+                }
+            }
             case 9 -> {
                 print("You've already searched this location, theres nothing here.");
             }
@@ -180,6 +218,18 @@ public class Player {
         this.weight = weight;
     }
 
+    public void setIsAlive(boolean isAlive) {
+        this.isAlive = isAlive;
+    }
+
+    public void setIsFighting(boolean isFighting) {
+        this.isFighting = isFighting;
+    }
+
+    public void setIsGameEnding(boolean isGameEnding) {
+        this.isGameEnding = isGameEnding;
+    }
+
     public String getName() {
         return name;
     }
@@ -194,5 +244,17 @@ public class Player {
 
     public int getWeight() {
         return weight;
+    }
+
+    public boolean getIsAlive() {
+        return isAlive;
+    }
+
+    public boolean getIsFighting() {
+        return isFighting;
+    }
+
+    public boolean getIsGameEnding() {
+        return isGameEnding;
     }
 }

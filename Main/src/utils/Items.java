@@ -62,7 +62,7 @@ public class Items {
                      case 0 -> {
                         // If player will over heal from item, don't allow healing
                         if (player.getHealth() + item.getValue() > 55) {
-                              clearLine(7);
+                              clearLine(backpackSize + 3);
                               print("You can't use the " + ANSI_TEXT_YELLOW + item.getName() + ANSI_RESET + " yet.");
                               lineBreak();
                               lineBreak();
@@ -75,19 +75,14 @@ public class Items {
                         }
                      }
                      case 1 -> {
-                        // If the player uses a knife, then they can't use an ammo related
-                        if (player.getWeapon().getName().equals("Knife")) {
-                              print("You don't need ammo for a knife");
-                        } else {
-                              weapon.setAmmo(weapon.getAmmo() + item.getValue());
-                              print("You used the " + ANSI_TEXT_YELLOW + item.getName() + ANSI_RESET + " and added " + ANSI_TEXT_YELLOW + item.getValue() + " ammo to your " + weapon.getName() + ANSI_RESET + ".");
-                              // Remove the item after using it
-                              player.removeBackpackItem(item);
-                        }
+                        weapon.setAmmo(weapon.getAmmo() + item.getValue());
+                        print("You used the " + ANSI_TEXT_YELLOW + item.getName() + ANSI_RESET + " and added " + ANSI_TEXT_YELLOW + item.getValue() + " ammo to your " + weapon.getName() + ANSI_RESET + ".");
+                        // Remove the item after using it
+                        player.removeBackpackItem(item);
                      }
                      case 2 -> {
                         // Player can't use story related items during combat, but can use them outside of combat
-                        if (Combat.alive) {
+                        if (player.getIsFighting()) {
                            print("You cannot use this item right now.");
                            lineBreak();
                            useItem(player);

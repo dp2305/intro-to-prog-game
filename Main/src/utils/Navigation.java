@@ -29,12 +29,12 @@ public class Navigation {
         false, false, false, false, false
     };
 
-    // Whether the location has searchable items - 0 = no items, 1 = searchable, 2 = story item search, 9 = already searched
+    // Whether the location has searchable items - 0 = no items, 1 = searchable, 2 = story item search, 3 = npc location,9 = already searched
     private static final int[] locationSearchIndex = {
-        2, 1, 0, 2, 1,
+        2, 1, 0, 2, 3,
         1, 0, 0, 2, 0,
-        2, 0, 0, 0, 2,
-        0, 0, 0, 2, 0,
+        2, 1, 0, 0, 2,
+        0, 0, 1, 2, 1,
         2, 1, 2, 0, 2
     };
 
@@ -52,8 +52,8 @@ public class Navigation {
         0, 0, 4, 0, 0,
         0, 1, 4, 1, 1,
         1, 1, 4, 4, 2,
-        2, 2, 2, 4, 2,
-        2, 2, 2, 2, 2
+        2, 1, 2, 4, 2,
+        1, 2, 2, 2, 2
     };
 
     // Descriptions of the locations
@@ -67,8 +67,8 @@ public class Navigation {
         "There might be some useful items here.",
         "The forest is dense, and the trees are tall. There might be something lurking here.",
         "This rivers currents are too harsh, it's dangerous.",
-        "It looks very dense. There might be something lurking here.",
-        "It looks very dense. There might be something lurking here.",
+        "Its all burnt down. There might be something lurking here.",
+        "Its all burnt down. There might be something lurking here.",
 
         "It looks very dense. There might be something lurking here.",
         "It looks very dense. There might be something lurking here.",
@@ -84,9 +84,9 @@ public class Navigation {
 
         "It seems dangerous here, but it might have something useful.",
         "It seems dangerous here, but it might have something useful.",
+        "Its dark and wet here. There might be something lurking here.",
         "The terrain is very rough. There might be something lurking here.",
         "The terrain is very rough. There might be something lurking here.",
-        "The terrain is very rough. There might be something lurking here."
     };
 
     public static void navigate(Player player) {
@@ -196,9 +196,10 @@ public class Navigation {
 
         // Print the map
         for (int y = 0; y < 5; y++) {
-            System.out.println("+---+---+---+---+---+");
+            print("+---+---+---+---+---+");
+            lineBreak();
             for (int x = 0; x < 5; x++) {
-                System.out.print("| ");
+                print("| ");
                 if (playerY == y && playerX == x) {
                     printColour("P ", ANSI_TEXT_GREEN); // Player's current location
                 } else if ((playerY == y && (playerX == x - 1 || playerX == x + 1)) || (playerX == x && (playerY == y - 1 || playerY == y + 1))) {
@@ -207,9 +208,11 @@ public class Navigation {
                     printColour("- ", ANSI_TEXT_RED); // Non-travelable locations
                 }
             }
-            System.out.println("|");
+            print("|");
+            lineBreak();
         }
-        System.out.println("+---+---+---+---+---+");
+        print("+---+---+---+---+---+");
+        lineBreak();
     }
 
     // Different method to view the map as well as nearby locations
@@ -246,29 +249,33 @@ public class Navigation {
 
     // Method to view the map related to the mission
     public static void viewMissionMap() {
+        // Print the map for the mission
+        for (int y = 0; y < 5; y++) {
+            print("+---+---+---+---+---+");
+            lineBreak();
+            for (int x = 0; x < 5; x++) {
+                print("| ");
+                int index = y * 5 + x;
+                switch (locationSearchIndex[index]) {
+                    case 2 -> {
+                        printColour("X ", ANSI_TEXT_RED); // Unsearched locations
+                    }
+                    case 3 -> {
+                        printColour("X ", ANSI_TEXT_BLUE); // NPC locations
+                    }
+                    case 9 -> {
+                        printColour("X ", ANSI_TEXT_GREEN); // Searched locations
+                    }
+                    default -> {
+                        print("  ");
+                    }
+                }
+            }
+            print("|");
+            lineBreak();
+        }
         print("+---+---+---+---+---+");
         lineBreak();
-        print("| " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |   |   | " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |   |");
-        lineBreak();
-        print("+---+---+---+---+---+");
-        lineBreak();
-        print("|   |   |   | " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |   |");
-        lineBreak();
-        print("+---+---+---+---+---+");
-        lineBreak();
-        print("| " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |   |   |   | " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |");
-        lineBreak();
-        print("+---+---+---+---+---+");
-        lineBreak();
-        print("|   |   |   | " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |   |");
-        lineBreak();
-        print("+---+---+---+---+---+");
-        lineBreak();
-        print("| " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |   | " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |   | " + ANSI_TEXT_RED + "X" + ANSI_RESET + " |");
-        lineBreak();
-        print("+---+---+---+---+---+");
-        lineBreak();
-
     }
     // To check if the player is at a certain loation
     public static String getLocationName() {

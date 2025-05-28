@@ -7,10 +7,9 @@ public class Combat {
 
     public static final Scanner sc = new Scanner(System.in);
     private static final Random random = new Random();
-    public static boolean alive;
 
     public static void combat(Player player) {
-        alive = true;
+        boolean alive = player.getIsAlive();
 
         while (alive && player.getHealth() > 0) {
             // All Enemies
@@ -75,7 +74,7 @@ public class Combat {
             };
 
             // Variables for combat
-            int playerAttackRoll, enemyAttackRoll;
+            int playerAttackChance, enemyAttackChance;
             boolean continueFighting;
             boolean triedToFlee = false;
 
@@ -102,6 +101,7 @@ public class Combat {
             lineBreak();
 
             while (fightCount < enemyCount) {
+                player.setIsFighting(true);
                 continueFighting = true;
 
                 // Selects an index for a random enemy every time a new fightr begins
@@ -131,11 +131,11 @@ public class Combat {
                     enemy.setAttack(enemyAttacks[enemySelection]);
 
                     // Variance in damage for attacks
-                    int playerDamageVariance = random.nextInt(6) - 3; // Randomise damage with a variance of -3 to 2
-                    int enemyDamageVariance = random.nextInt(4) - 1; // Randomise damage with a variance of -1 to 3
+                    int damageVariance = random.nextInt(5) - 3; // Randomise damage with a variance of -2 to 2
+                    int weaponAccuracy = player.getWeapon().getRange() * 2;
 
-                    int totalPlayerDamage = player.getWeapon().getDamage() + playerDamageVariance;
-                    int totalEnemyDamage = enemy.getAttack().getDamage() + enemyDamageVariance;
+                    int totalPlayerDamage = player.getWeapon().getDamage() + damageVariance;
+                    int totalEnemyDamage = enemy.getAttack().getDamage() + damageVariance;
 
                     print("You have " + ANSI_TEXT_YELLOW + player.getHealth() + ANSI_RESET + " health.");
                     lineBreak();
@@ -156,7 +156,7 @@ public class Combat {
                                 // Player attack
                                 print("You attempted to attack the " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + ".");
                                 lineBreak();
-                                playerAttackRoll = random.nextInt(6) + 1; // 1-6 instead of 0-5
+                                playerAttackChance = random.nextInt(100); // 1-6 instead of 0-5
 
                                 if (player.getWeapon().getAmmo() <= 0) {
                                     // Search for an ammo item in the player's backpack
@@ -174,20 +174,30 @@ public class Combat {
                                     }
                                     if (!foundAmmo) {
                                         print("You ran out of ammo... ");
-                                        continueFighting = false;
-                                        alive = false;
-                                        fightCount = 100;
-                                        break;
+                                        lineBreak();
+
+                                        boolean fleeChance = random.nextBoolean();
+
+                                        if (fleeChance) {
+                                            print("You were able to flee, continue your mission.");
+                                        } else {
+                                            print("You failed to flee and got defeated by the enemy.");
+                                            continueFighting = false;
+                                            alive = false;
+                                            player.setIsAlive(alive);
+                                            fightCount = 100;
+                                            break;
+                                        }
                                     }
                                     lineBreak();
                                 }
 
                                 // Player attack sequence - failed to attack, attacked successfully
-                                if (playerAttackRoll <= 1) {
-                                    print("Your attack missed the " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + ".");
-                                } else {
+                                if (playerAttackChance <= 80 - weaponAccuracy) {
                                     print("You hit the " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + " for " + ANSI_TEXT_YELLOW + totalPlayerDamage + ANSI_RESET + " damage.");
                                     enemy.setHealth(enemy.getHealth() - (totalPlayerDamage));
+                                } else {
+                                    print("Your attack missed the " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + ".");
                                 }
                                 lineBreak();
 
@@ -199,9 +209,9 @@ public class Combat {
                                     lineBreak();
                                     print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET  + " attempted to attack you with its " + ANSI_TEXT_YELLOW + enemy.getAttack().getName() + ANSI_RESET + ".");
                                     lineBreak();
-                                    enemyAttackRoll = random.nextInt(6) + 1; // 1-6 instead of 0-5
+                                    enemyAttackChance = random.nextInt(6) + 1; // 1-6 instead of 0-5
 
-                                    if (enemyAttackRoll <= 1) {
+                                    if (enemyAttackChance <= 1) {
                                         print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + " couldn't hit you." );
                                     } else {
                                         print("You got hit for " + ANSI_TEXT_YELLOW + totalEnemyDamage + ANSI_RESET + " damage.");
@@ -220,15 +230,14 @@ public class Combat {
                                 } else {
                                     if (enemyCount > 1) {
                                         print("You cannot flee during an encounter with multiple enemies.");
-                                        // Manually set Flee Fighting
-                                        fleeFightChance = 0;
+                                        lineBreak();
+                                        break; // Prevent fleeing if multiple enemies
                                     } else {
                                         // Otherwise a random number out of 100 is generated
                                         fleeFightChance = random.nextInt(100);
                                     }
 
                                     if (fleeFightChance < 50 - fleeCount) {
-                                        // 20 < 50
                                         print("You managed to escape successfully. Continue your mission.");
                                         if (fleeCount != 30) {
                                             fleeCount+=10;
@@ -242,9 +251,9 @@ public class Combat {
                                         lineBreak();
                                         print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET  + " attempted to attack you with its " + ANSI_TEXT_YELLOW + enemy.getAttack().getName() + ANSI_RESET + ".");
                                         lineBreak();
-                                        enemyAttackRoll = random.nextInt(6) + 1; // 1-5 instead of 0-5
+                                        enemyAttackChance = random.nextInt(6) + 1; // 1-5 instead of 0-5
 
-                                        if (enemyAttackRoll <= 1) {
+                                        if (enemyAttackChance <= 1) {
                                             print("The " + ANSI_TEXT_YELLOW + enemy.getName() + ANSI_RESET + " failed to attack you.");
                                         } else {
                                             print("You got hit for " + ANSI_TEXT_YELLOW + totalEnemyDamage + ANSI_RESET + " damage.");
@@ -269,6 +278,7 @@ public class Combat {
                         continueFighting = false;
                         alive = false;
                         fightCount = 100;
+                        player.setIsAlive(false);
                     }
 
                     if (enemy.getHealth() <= 0) {
@@ -290,6 +300,6 @@ public class Combat {
                 break;
             }
         }
-        alive = false;
+        player.setIsFighting(false);
     }
 }
