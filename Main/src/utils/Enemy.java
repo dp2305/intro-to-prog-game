@@ -3,13 +3,11 @@ package utils;
 public class Enemy {
     private String name;
     private int health;
-    private int weight;
-    private Weapon weapon;
+    private Attacks attack;
 
-    public Enemy(String name, int health, int weight) {
+    public Enemy(String name, int health) {
         this.name = name;
         this.health = health;
-        this.weight = weight;
     }
 
     public void setName(String name) {
@@ -20,12 +18,8 @@ public class Enemy {
         this.health = health;
     }
 
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-    public void setWeapon(Weapon weapon) {
-        this.weapon = weapon;
+    public void setAttack(Attacks attack) {
+        this.attack = attack;
     }
 
     public String getName() {
@@ -36,16 +30,12 @@ public class Enemy {
         return health;
     }
 
-    public int getWeight() {
-        return weight;
-    }
-
-    public Weapon getWeapon() {
-        return weapon;
+    public Attacks getAttack() {
+        return attack;
     }
 
     @Override
     public String toString() {
-        return String.format("--Character info--\nName: %s\nHealth: %d\nWeapon: %s", name, health, weapon);
+        return String.format("--Character info--\nName: %s\nHealth: %d\nAttack: %s", name, health, attack);
     }
 }

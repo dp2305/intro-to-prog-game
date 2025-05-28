@@ -32,7 +32,7 @@ public class Formatting {
    }
 
    public static void printSpacer() {
-      printColour("            ----------------------------", "\u001B[93m");
+      printColour("            ----------------------------", ANSI_TEXT_GREEN);
       lineBreak();
       lineBreak();
    }
