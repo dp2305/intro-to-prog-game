@@ -11,12 +11,23 @@ package utils;
 
 public class Formatting {
 
-   // ANSI codes for color - better readability in the console
+   /** ANSI reset code to clear all text formatting. */
    public static final String ANSI_RESET = "\u001B[0;49m";
+
+   /** ANSI code for red-coloured text. */
    public static final String ANSI_TEXT_RED = "\u001B[91m";
+   /** ANSI code for green-coloured text. */
    public static final String ANSI_TEXT_GREEN = "\u001B[92m";
+   /** ANSI code for yellow-coloured text. */
    public static final String ANSI_TEXT_YELLOW = "\u001B[93m";
+   /** ANSI code for blue-coloured text. */
    public static final String ANSI_TEXT_BLUE = "\u001B[94m";
+
+   /**
+    * Prints the given text without a newline.
+    *
+    * @param text the text to print
+    */
 
    // Printing methods created to simplify coding and reading text-heavy sections of code
 
