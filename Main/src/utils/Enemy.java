@@ -1,5 +1,11 @@
 package utils;
 
+/**
+ * Enemy class represents an enemy character with a name, health, weight, and weapon.
+ * F5AC Group 2 - [Aditya, Dutt, Angus]
+ * @version ?????
+ */
+
 public class Enemy {
     private String name;
     private int health;
