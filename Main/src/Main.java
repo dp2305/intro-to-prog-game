@@ -2,6 +2,15 @@ import java.util.Scanner;
 import utils.*;
 import static utils.Formatting.*;
 
+
+/**
+ * Main class is the heart for the text-based survival game called “Rescue the survivors" RTS for short.
+ * Responsible for game setup, character creation, item/weapon selection and the main gameplay loop.
+ * Helper classes are used from the utils package for formatting, navigation, item usage, and player status.
+ * F5AC Group 2 - [Aditya, Dutt, Angus]
+ * @version ?????
+ */
+
 public class Main {
     // Scanner and Random objects
     private static final Scanner sc = new Scanner(System.in);
@@ -51,7 +60,7 @@ public class Main {
                         case 1 -> {
                             printColour("<=-- Using Item --=>", ANSI_TEXT_YELLOW);
                             lineBreak(2);
-                            Items.useItem(playerCharacter);
+                    7        Items.useItem(playerCharacter);
                         }
                         // Move
                         case 2 -> {

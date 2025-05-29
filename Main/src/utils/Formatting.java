@@ -1,5 +1,14 @@
 package utils;
 
+/**
+ * Formatting class enhances readability through the use of colors in the text.
+ * This class is not meant to be instantiated.
+ * Contains static methods and data
+ * Has methods to print formatted text and managing console layout.
+ * F5AC Group 2 - [Aditya, Dutt, Angus]
+ * @version ?????
+ */
+
 public class Formatting {
 
    // ANSI codes for color - better readability in the console

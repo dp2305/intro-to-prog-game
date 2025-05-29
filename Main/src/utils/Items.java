@@ -2,6 +2,14 @@ package utils;
 import java.util.Scanner;
 import static utils.Formatting.*;
 
+/**
+ * Item class gives the player the ability to use an item, such as healing supplies or ammunition.
+ * Each item has a name, value, weight, and type.
+ * Items include Ammunition and Healing items such as First Aid Kit and Food Pack
+ * F5AC Group 2 - [Aditya, Dutt, Angus]
+ * @version ?????
+ */
+
 public class Items {
 
    private static final Scanner sc = new Scanner(System.in);

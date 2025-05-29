@@ -3,6 +3,16 @@ import java.util.Random;
 import java.util.Scanner;
 import static utils.Formatting.*;
 
+
+/**
+ * Combat Class is where the fights against enemies occurs.
+ * This class is not meant to be instantiated.
+ * This class runs battles between the player and a number of enemies.
+ * It randomly picks enemies and their attacks, then lets the player choose to fight or run.
+ * Damage calculations are random, and weapon effects.
+ * It does not end until the player defeats all enemies, runs away, or dies.
+ */
+
 public class Combat {
 
     public static final Scanner sc = new Scanner(System.in);

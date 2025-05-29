@@ -2,6 +2,17 @@ package utils;
 import java.util.Scanner;
 import static utils.Formatting.*;
 
+/**
+ * Navigation class handles the player's whereabouts throughout the game world in a 5x5 grid system.
+ * This class is not meant to be instantiated.
+ * Contains static methods and data
+ * Each grid cell corresponds to a location with a name, description, and potential enemy encounters.
+ * Coordinates location updates, movement options, map rendering, and combat events.
+ * This class contains static methods and data
+ * F5AC Group 2 - [Aditya, Dutt, Angus]
+ * @version ?????
+ */
+
 public class Navigation {
     private static final Scanner sc = new Scanner(System.in);
 

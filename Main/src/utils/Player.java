@@ -4,6 +4,16 @@ import java.util.Arrays;
 import java.util.Random;
 import static utils.Formatting.*;
 
+
+/**
+ * Player class represents the main character controlled by the user.
+ * Name, health, weapon, and inventory  is organised here.
+ * Methods included are manage inventory, rest to regain health, and check player status. (Search??)
+ * Used to control character state and interactions throughout the game.
+ * F5AC Group 2 - [Aditya, Dutt, Angus]
+ * @version ?????
+ */
+
 public class Player {
 
     private static final Random random = new Random();
