@@ -15,15 +15,34 @@ import static utils.Formatting.*;
 
 public class Combat {
 
+    /**
+     * Scanner for reading user input during combat choices.
+     */
     public static final Scanner sc = new Scanner(System.in);
+
+    /**
+     * Random number generator used for enemy selection, attack variation, and chance-based outcomes.
+     */
     private static final Random random = new Random();
+
+    /**
+     * Tracks how often the player has successfully fled to prevent repeated fleeing.
+     */
     private static int fleeCount = 0; // The number of times the player has fled an encounter - set outside of the method so it doesn't reset every time the method is run
 
+    /**
+     * Handles a full combat encounter for the specified player. The player may face one or more enemies,
+     * each with their own health and attacks. Players can fight, flee (with limitations), or use items.
+     * The method ends if the player dies, flees successfully, or defeats all enemies.
+     *
+     * @param player The player object involved in combat.
+     */
     public static void combat(Player player) {
         boolean isPlayerAlive = player.getIsAlive();
 
+
         while (isPlayerAlive && player.getHealth() > 0) {
-            // All Enemies
+            // Create enemy and attack arrays
             Enemy[] enemies = {
                 new Enemy("Snake",            5),
                 new Enemy("Raven",            7),
@@ -35,6 +54,7 @@ public class Combat {
             };
 
             // All Enemy Attacks
+
             // Snake Attacks
             Attacks[] snakeAttacks = {
                 new Attacks("Bite", 3),
@@ -84,7 +104,7 @@ public class Combat {
                 new Attacks("Claws", 7)
             };
 
-            // Variables for combat
+            // Combat state variables
             int playerAttackChance, enemyAttackChance;
             boolean continueFighting;
             boolean hasTriedToFlee = false;
@@ -114,7 +134,7 @@ public class Combat {
                 player.setIsFighting(true);
                 continueFighting = true;
 
-                // Selects an index for a random enemy every time a new fightr begins
+                // Selects an index for a random enemy every time a new fight begins
                 int enemySelection = random.nextInt(7); // 0 to 6, since there are 7 enemy types
 
                 // Set random Enemy based on random index outside of the main while loop so it doesn't change every fight
@@ -127,7 +147,7 @@ public class Combat {
                     // Select a random attack for the selected enemy
                     int weaponSelection = random.nextInt(3); // 0 to 2, since each enemy has 3 attacks
 
-                    // All enemy weapons
+                    // Set enemy's current attack
                     Attacks[] enemyAttacks = {
                         snakeAttacks[weaponSelection],
                         ravenAttacks[weaponSelection],
@@ -140,7 +160,7 @@ public class Combat {
 
                     enemy.setAttack(enemyAttacks[enemySelection]);
 
-                    // Variance in damage for attacks
+                    // Variance in damage for attacks in player and enemy
                     int damageVariance = random.nextInt(5) - 3; // Randomise damage with a variance of -2 to 2
                     int weaponAccuracy = player.getWeapon().getRange() * 2;
 

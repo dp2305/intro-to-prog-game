@@ -18,6 +18,14 @@ public class Main {
     // Global input validation variables
     private static boolean primaryChoiceHandler, secondaryChoiceHandler;
 
+    /**
+     * The main game loop that manages the overall structure and flow of the game.
+     * Character instantiation</li>
+     * Setup steps (name, weapon, and item selection)
+     * Repeating player actions until game over
+     * Game over messages and replay options
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
         boolean gameRunning = true;
         boolean repeatOptions = true;
@@ -178,7 +186,11 @@ public class Main {
         lineBreak();
     }
 
-        // Method to ask the player for their name
+    /**
+     * Prompts the player to input a character name and confirm it.
+     * Loops until a non-empty, confirmed name is entered.
+     * @param playerCharacter The player object to assign the name to.
+     */
     public static void promptPlayerName(Player playerCharacter) {
         primaryChoiceHandler = true;
 
@@ -225,7 +237,12 @@ public class Main {
         printSpacer();
     }
 
-    // Method to display information about the mission
+
+    /**
+     * Displays the mission briefing to the player.
+     * Introduces the story context, goal, and background setting.
+     * @param playerCharacter The player character to personalize the briefing with their name.
+     */
     public static void displayMissionInformation(Player playerCharacter) {
         print("\"" + ANSI_TEXT_YELLOW + playerCharacter.getName() + ANSI_RESET + ", you have been chosen for an important reconnaissance mission.");
         lineBreak();
@@ -246,7 +263,11 @@ public class Main {
         printSpacer();
     }
 
-    // This is where the player is asked to choose a weapon
+    /**
+     * Presents weapon choices to the player and allows them to select one.
+     * The selection is confirmed before being finalised.
+     * @param playerCharacter The player object to assign the selected weapon to.
+     */
     public static void playerWeaponSelection(Player playerCharacter) {
         primaryChoiceHandler = true;
 
@@ -327,7 +348,11 @@ public class Main {
         lineBreak();
     }
 
-    // This is where the player is asked to choose 2 items to start with
+    /**
+     * Allows the player to select two starting items (e.g., Food Pack, Ammo Box, First Aid Kit).
+     * Each selection is confirmed before being added to the player's backpack.
+     * @param playerCharacter The player object to which selected items are added.
+     */
     public static void playerItemSelection(Player playerCharacter) {
         int itemHandler = 0;
 

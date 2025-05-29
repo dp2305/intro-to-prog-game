@@ -100,6 +100,13 @@ public class Navigation {
         "The terrain is very rough. There might be something lurking here.",
     };
 
+    /**
+     * Handles player navigation by taking input directions and updating the player's location.
+     * Prints the map, current location, and movement options.
+     * Automatically triggers combat if the new location supports it.
+     *
+     * @param player the Player object representing the current player state
+     */
     public static void navigate(Player player) {
         boolean isValidChoice = true;
 
@@ -198,6 +205,13 @@ public class Navigation {
     }
 
     // Method to print a map based on the players location
+
+    /**
+     * Prints the 5x5 grid map to the console showing the player's current position,
+     * travelable adjacent locations, and inaccessible locations.
+     * Player position is marked with 'P', adjacent travelable locations with 'O',
+     * and non-travelable locations with '-'.
+     */
     public static void map() {
         // Calculate player's current location
         playerX = currentLocation % 5;
@@ -225,6 +239,10 @@ public class Navigation {
     }
 
     // Different method to view the map as well as nearby locations
+    /**
+     * Displays the player's current location, the map, and descriptions of adjacent locations.
+     * Useful for providing context and surroundings to the player.
+     */
     public static void viewMap() {
         // Calculate the coordinates and relative index of the player's location
         playerX = currentLocation % 5;
@@ -257,6 +275,11 @@ public class Navigation {
     }
 
     // Method to view the map related to the mission
+    /**
+     * Displays a mission-focused map view with special markers for unsearched locations (red X),
+     * NPC locations (blue X), and already searched locations (green X).
+     * Other locations are blank.
+     */
     public static void viewMissionMap() {
         // Print the map for the mission
         for (int y = 0; y < 5; y++) {
@@ -288,36 +311,64 @@ public class Navigation {
     }
 
     // To check if the player is at a certain loation
+    /**
+     * Gets the player's current location name.
+     * @return the name of the current location as a String
+     */
     public static String getLocationName() {
         return locationNames[characterLocationIndex];
     }
 
+
     // To check if the player is able to rest at the lcoation
+    /**
+     * Checks whether the player has rested at the current location.
+     * @return {@code true} if the player has rested here, {@code false} otherwise
+     */
     public static boolean getRestedLocations() {
         return restedLocations[characterLocationIndex];
     }
 
     // To check if the played has searched the location
+    /**
+     * Returns the search index of the current location.
+     * The index indicates whether the location has searchable items or if it has been searched.
+     * @return an integer representing the location search state
+     */
     public static int getLocationSearchIndex() {
         return locationSearchIndex[characterLocationIndex];
     }
 
     // To check the possible encounters the player can have at the location
+    /**
+     * Returns the maximum number of possible combat encounters at the current location.
+     * @return the number of possible combat encounters
+     */
     public static int getPossibleEncounters() {
         return possibleCombatEncounters[characterLocationIndex];
     }
 
     // Update the search index to indicate that it has already been searched
+    /**
+     * Marks the current location as already searched by updating the search index.
+     * Sets the location's search index to 9.
+     */
     public static void updateLocationSearchIndex() {
         locationSearchIndex[characterLocationIndex] = 9;
     }
 
     // Update the rested locations
+    /**
+     * Updates the rested status of the current location, marking it as not rested.
+     */
     public static void updateRestedLocations() {
         restedLocations[characterLocationIndex] = false;
     }
 
     // Update the location fight status
+    /**
+     * Updates the combat status of the current location, marking it as no longer having combat encounters.
+     */
     public static void updateLocationFightStatus() {
         locationHasCombat[characterLocationIndex] = false;
     }

@@ -18,17 +18,26 @@ public class Player {
 
     private static final Random random = new Random();
 
+    /** Player name */
     private String name;
+    /** Player health */
     private int health;
+    /** Weapon used by the player */
     private Weapon weapon;
+    /** Total weight of the player's carried items and weapon */
     private int weight;
+    /** Flag indicating whether the player is alive */
     private boolean isAlive;
+    /** Flag indicating whether the player is currently in combat */
     private boolean isFighting;
+    /** Flag indicating whether the game is ending (i.e., final event triggered) */
     private boolean isGameEnding;
+    /** Flag to control unique first-time dialogue with an NPC */
     private static boolean isFirstNPCEncounter = true;
+    /** The player's inventory, stored as a list of Items */
     private final ArrayList<Items> backpack = new ArrayList<>(); // Use an arraylist to handle items being added and removed from the backpack
 
-    // All available fragments
+    /** List of all possible game fragments that the player can find */
     private static final ArrayList<Items> fragments = new ArrayList<>(Arrays.asList(
         new Items("Fragment No. 1", 1, 0, 2),
         new Items("Fragment No. 2", 2, 0, 2),
@@ -41,12 +50,22 @@ public class Player {
         new Items("Fragment No. 9", 9, 0, 2)
     ));
 
+    /**
+     * Constructs a new Player with specified name, health and alive status.
+     * @param name the player's name
+     * @param health initial health value
+     * @param isAlive true if the player is alive, false otherwise
+     */
     public Player(String name, int health, boolean isAlive) {
         this.name = name;
         this.health = health;
         this.isAlive = isAlive;
     }
 
+    /**
+     * Displays the contents of the player's backpack.
+     * @return a formatted String listing the items in the backpack
+     */
     // Display the player's backpack contents
     public String displayBackpackContents() {
         String backpackString = "";
@@ -56,22 +75,36 @@ public class Player {
         return backpackString;
     }
 
-    // Add an item to the player's backpack
+    /**
+     * Adds an item to the player's backpack.
+     * @param item the item to add
+     */
     public void addBackpackItem(Items item) {
         backpack.add(item);
     }
 
-    // Remove an item from the player's backpack
+    /**
+     * Removes an item from the player's backpack.
+     * @param item the item to remove
+     */
     public void removeBackpackItem(Items item) {
         backpack.remove(item);
     }
 
-    // Get an item from the player's backpack by index
+    /**
+     * Retrieves an item from the backpack by index.
+     * @param index position of the item in the backpack
+     * @return the item at the given index
+     */
     public Items getBackpackItem(int index) {
         return backpack.get(index);
     }
 
-    // Get an item from the player's backpack by name
+    /**
+     * Retrieves an item from the backpack by name.
+     * @param name the name of the item to find
+     * @return the item if found, null otherwise
+     */
     public Items getBackpackItem(String name) {
         for (Items item : backpack) {
             if (item.getName().equals(name)) {
@@ -81,6 +114,11 @@ public class Player {
         return null;
     }
 
+    /**
+     * Allows the player to rest and regain health if possible.
+     * A random chance determines healing success.
+     * @param player the player attempting to rest
+     */
     public static void rest(Player player) {
         if (player.getHealth() >= 45) {
             print("You can't rest, you are already at full health.");
@@ -106,7 +144,10 @@ public class Player {
         lineBreak();
     }
 
-    // Display the player stats, and what they are carrying
+    /**
+     * Prints the current status of the player including health, weapon, and inventory.
+     * @param player the player whose stats is being checked
+     */
     public static void checkCharacter(Player player) {
         print("You have " + player.getHealth() + " health.");
         lineBreak();
@@ -123,7 +164,11 @@ public class Player {
         }
     }
 
-    // Search the player's  current location for items
+    /**
+     * Allows the player to search their current location for items, fragments, or NPC encounters.
+     * Result depends on the current search index and random chance.
+     * @param player the player performing the search
+     */
     public static void search(Player player) {
         switch (Navigation.getLocationSearchIndex()) {
             case 0 -> print("You looked around but couldn't find anything useful.");
@@ -211,7 +256,9 @@ public class Player {
         lineBreak();
     }
 
-    // Calculate the player's weight
+    /**
+     * Calculates the total weight of the player based on weapon and backpack items.
+     */
     public void calculatePlayerWeight() {
         weight = 0;
         weight = weight + weapon.getWeight();
@@ -222,6 +269,8 @@ public class Player {
 
         setWeight(weight);
     }
+
+    // ----- Setters -----
 
     public void setName(String name) {
         this.name = name;
@@ -250,6 +299,8 @@ public class Player {
     public void setIsGameEnding(boolean isGameEnding) {
         this.isGameEnding = isGameEnding;
     }
+
+    // ----- Getters -----
 
     public String getName() {
         return name;

@@ -12,21 +12,54 @@ import static utils.Formatting.*;
 
 public class Items {
 
+
+   /** Scanner for user input when selecting items */
    private static final Scanner sc = new Scanner(System.in);
 
    // Fields to store item details
+
+   /** Name of the item */
    private String name;
-   private int value; // Value is what the item provides, eg. for ammo, it is the number of bullets, for healing items, it is the amount of health it heals
+   /**
+    * Functional value of the item:
+    *   Healing item: amount of HP it restores
+    *   Ammunition: number of bullets it adds
+    *   Story item: encoded story information
+    */
+   private int value;
+   /** Weight of the item, which may affect carrying capacity */
    private int weight;
+   /**
+    * Type of the item:
+    * 0 = Healing
+    * 1 = Ammo
+    * 2 = Story item
+    */
    private int type; // Type is the type of item, eg. healing (0), ammo (1), story (2)
 
-   // Constructor to initialize an item with a name, value, and weight.
+   /**
+    * Constructor to initialize an item with the given name, value, weight, and type.
+    *
+    * @param name  Name of the item
+    * @param value Functional value (e.g., HP restored, bullets added)
+    * @param weight Weight of the item
+    * @param type Type of the item (0 = healing, 1 = ammo, 2 = story)
+    */
    public Items(String name, int value, int weight, int type) {
       this.name = name;
       this.value = value;
       this.weight = weight;
       this.type = type;
    }
+
+   /**
+    * Allows the player to use an item from their backpack.
+    * Healing items restore health (up to a max of 55)
+    * Ammo items add bullets to the current weapon
+    * Story items can only be used outside of combat and display lore text
+    * If the player attempts to use an item that is invalid or not usable at the moment, a message is shown.
+    * @param player The player attempting to use the item
+    */
 
    public static void useItem(Player player) {
       boolean isValidChoice = true;
@@ -116,34 +149,62 @@ public class Items {
       }
    }
 
+   /**
+    * @return Item name
+    */
    public String getName() {
       return name;
    }
 
+   /**
+    * @return Item value (HP restored, bullets added, etc.)
+    */
    public int getValue() {
       return value;
    }
 
+   /**
+    * @return Item weight
+    */
    public int getWeight() {
       return weight;
    }
 
+   /**
+    * @return Item type of the item (0 = healing, 1 = ammo, 2 = story)
+    */
    public int getType() {
       return type;
    }
 
+   /**
+    * Sets the item name.
+    * @param name New item name
+    */
    public void setName(String name) {
       this.name = name;
    }
 
+   /**
+    * Sets the item value.
+    * @param value New item value
+    */
    public void setValue(int value) {
     this.value = value;
    }
 
+   /**
+    * Sets the item weight.
+    * @param weight New item weight
+    */
    public void setWeight(int weight) {
       this.weight = weight;
    }
 
+   /**
+    * Sets the item type.
+    * @param type New item type (0 = healing, 1 = ammo, 2 = story)
+    */
    public void setType(int type) {
       this.type = type;
    }
