@@ -6,7 +6,6 @@ package utils;
  * This class provides accessors (get) and mutators (set) for each field.
  * Allows the player to choose between 3 different weapons to use in RTS.
  * F5AC Group 2 - [Aditya, Dutt, Angus]
- * @version ?????
  */
 
 public class Weapon {

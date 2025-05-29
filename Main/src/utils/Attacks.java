@@ -1,13 +1,13 @@
 package utils;
 
 /**
- * Combat Class is where the fights against enemies occurs.
- * This class is not meant to be instantiated.
- * This class runs battles between the player and a number of enemies.
- * It randomly picks enemies and their attacks, then lets the player choose to fight or run.
- * Damage calculations are random, and weapon effects.
- * It does not end until the player defeats all enemies, runs away, or dies.
+ * The Attacks class represents a basic attack used in combat within the game.
+ * Each attack has a name and an associated damage value used by enemies and the player.
+ * This class serves as a data model for storing and retrieving information about individual attacks,
+ * It includes standard getter and setter methods to manipulate the attack's name and damage.
+ * F5AC Group 2 - [Aditya, Dutt, Angus]
  */
+
 
 
 public class Attacks {
@@ -16,7 +16,6 @@ public class Attacks {
    private String name;
    /** The attack damage value. */
    private int damage;
-
 
    /**
     * Constructs a new {@code Attacks} object with the specified name and damage.

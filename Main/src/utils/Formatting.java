@@ -6,7 +6,6 @@ package utils;
  * Contains static methods and data
  * Has methods to print formatted text and managing console layout.
  * F5AC Group 2 - [Aditya, Dutt, Angus]
- * @version ?????
  */
 
 public class Formatting {

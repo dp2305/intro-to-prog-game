@@ -11,6 +11,7 @@ import static utils.Formatting.*;
  * It randomly picks enemies and their attacks, then lets the player choose to fight or run.
  * Damage calculations are random, and weapon effects.
  * It does not end until the player defeats all enemies, runs away, or dies.
+ * F5AC Group 2 - [Aditya, Dutt, Angus]
  */
 
 public class Combat {

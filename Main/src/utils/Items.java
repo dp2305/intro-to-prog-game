@@ -7,7 +7,6 @@ import static utils.Formatting.*;
  * Each item has a name, value, weight, and type.
  * Items include Ammunition and Healing items such as First Aid Kit and Food Pack
  * F5AC Group 2 - [Aditya, Dutt, Angus]
- * @version ?????
  */
 
 public class Items {

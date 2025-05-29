@@ -11,7 +11,6 @@ import static utils.Formatting.*;
  * Methods included are manage inventory, rest to regain health, and check player status. (Search??)
  * Used to control character state and interactions throughout the game.
  * F5AC Group 2 - [Aditya, Dutt, Angus]
- * @version ?????
  */
 
 public class Player {

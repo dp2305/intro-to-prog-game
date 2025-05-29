@@ -8,7 +8,6 @@ import static utils.Formatting.*;
  * Responsible for game setup, character creation, item/weapon selection and the main gameplay loop.
  * Helper classes are used from the utils package for formatting, navigation, item usage, and player status.
  * F5AC Group 2 - [Aditya, Dutt, Angus]
- * @version ?????
  */
 
 public class Main {
@@ -68,7 +67,7 @@ public class Main {
                         case 1 -> {
                             printColour("<=-- Using Item --=>", ANSI_TEXT_YELLOW);
                             lineBreak(2);
-                    7        Items.useItem(playerCharacter);
+                            Items.useItem(playerCharacter);
                         }
                         // Move
                         case 2 -> {
