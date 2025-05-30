@@ -313,8 +313,8 @@ public class Combat {
          if (fightCount >= enemyCount) {
             break;
          }
-         Navigation.updateLocationFightStatus();
       }
+      Navigation.updateLocationFightStatus();
       player.setIsFighting(false);
    }
 }

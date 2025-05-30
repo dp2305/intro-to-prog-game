@@ -35,7 +35,7 @@ public class Player {
 
       // Add 9 nuclear cores to the nuclearCores arraylist
       for (int i = 0; i < 9; i++) {
-         nuclearCores.add(new Items("Nuclear Core No." + (i + 1)));
+         nuclearCores.add(new Items("Nuclear Core No. " + (i + 1)));
       }
    }
 
@@ -193,13 +193,13 @@ public class Player {
          case 3 -> {
             // If its the first encounter with the NPC, print the NPC's dialogue
             if (isFirstNPCEncounter) {
-               print("Unknown Scientist: \"" + colour(YELLOW, this.name) + ", you must be here to help us, right?\"");
+               print(colour(BLUE, "Unknown Scientist") + ": \"" + colour(YELLOW, this.name) + ", you must be here to help us, right?\"");
                lineBreak();
-               print("Unknown Scientist: \"We've been waiting for you. I'm Victor, my partners in another room unconcious.\"");
+               print(colour(BLUE, "Unknown Scientist") + ": \"We've been waiting for you. I'm Victor, my partners in another room unconcious.\"");
                lineBreak();
-               print("Victor: \"I've been trying to get into the bunker, but we have no power and " + colour(YELLOW, "wer'e missing the nuclear cores to run the backup reactor") + ". We won't last much longer out here with all the radiation.\"");
+               print(colour(BLUE, "Victor") + ": \"I've been trying to get into the bunker, but we have no power and " + colour(YELLOW, "wer'e missing the nuclear cores to run the backup reactor") + ". We won't last much longer out here with all the radiation.\"");
                lineBreak();
-               print("Victor: \"Have you found any of the nuclear cores by any chance?\"");
+               print(colour(BLUE, "Victor") + ": \"Have you found any of the nuclear cores by any chance?\"");
                lineBreak();
                lineBreak();
                isFirstNPCEncounter = false;
@@ -218,11 +218,11 @@ public class Player {
 
             // If the player doesn't have all 9 nuclear cores, tell them how many are missing
             if (nuclearCoreCount < 9) {
-               print("Victor: \"It seems like you still need to find " + colour(YELLOW, (9 - nuclearCoreCount) + " nuclear cores") + ".\"");
+               print(colour(BLUE, "Victor") + ": \"It seems like you still need to find " + (9 - nuclearCoreCount) + " nuclear cores.\"");
             } else {
-               print("Victor: \"You did it! You got all 9 nuclear cores! Now I can run the backup reactor and open the bunker.\"");
+               print(colour(BLUE, "Victor") + ": \"You did it! You got all 9 nuclear cores! Now I can run the backup reactor and open the bunker.\"");
                lineBreak();
-               print("Victor: \"Now we have access to the bunker, we can stay here until the reinforcements come in.\"");
+               print(colour(BLUE, "Victor") + ": \"Now we have access to the bunker, we can stay here until the reinforcements come in.\"");
                this.setIsGameEnding(true);
             }
          }

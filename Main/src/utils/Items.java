@@ -89,7 +89,7 @@ public class Items {
                   switch (item.getType()) {
                      case 0 -> {
                         // If player will over-heal from item, don't allow healing
-                        if (player.getHealth() + item.getValue() > 55) {
+                        if (player.getHealth() + item.getValue() > 90) {
                            clearLine(backpackSize + 3);
                            print("You can't use the " + colour(YELLOW, item.getName()) + " yet.");
                            lineBreak();
