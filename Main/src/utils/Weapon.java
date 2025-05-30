@@ -1,130 +1,69 @@
 package utils;
 
 /**
- * Weapon class allows the player to use a weapon.
+ * The {@code Weapon} class is used to create a weapon object.
  * Each weapon has a name, damage value, amount of ammo, range, and weight.
- * This class provides accessors (get) and mutators (set) for each field.
- * Allows the player to choose between 3 different weapons to use in RTS.
- * F5AC Group 2 - [Aditya, Dutt, Angus]
  */
-
 public class Weapon {
-    /** Weapon name */
-    private String name;
-    /** Weapon damage value */
-    private int damage;
-    /** Weapon ammunition */
-    private int ammo;
-    /** Weapon weight */
-    private int weight;
-    /** Weapon range */
-    private int range;
+   private String name;
+   private int damage;
+   private int ammo;
+   private int weight;
+   private int range;
 
-    /**
-     * Constructs a {@code Weapon} with the specified attributes.
-     *
-     * @param name   weapon name
-     * @param damage weapon damage value
-     * @param ammo   amount of ammunition available
-     * @param weight weapon weight
-     * @param range  the range of the weapon
-     */
+   /**
+    * Constructs a new {@code Weapon} object with the specified attributes.
+    * @param name   The name of the weapon
+    * @param damage The damage value of the weapon
+    * @param ammo   The amount of ammo available
+    * @param weight The weight of the weapon
+    * @param range  The range of the weapon
+    */
+   public Weapon(String name, int damage, int ammo, int weight, int range) {
+      this.name = name;
+      this.damage = damage;
+      this.ammo = ammo;
+      this.weight = weight;
+      this.range = range;
+   }
 
-    public Weapon(String name, int damage, int ammo, int weight, int range) {
-        this.name = name;
-        this.damage = damage;
-        this.ammo = ammo;
-        this.weight = weight;
-        this.range = range;
-    }
+   public String getName() {
+      return name;
+   }
 
-    /**
-     * Returns the name of the weapon.
-     * @return the weapon name
-     */
+   public int getDamage() {
+      return damage;
+   }
 
-    public String getName() {
-        return name;
-    }
+   public int getAmmo() {
+      return ammo;
+   }
 
-    /**
-     * Returns the weapon damage value.
-     * @return the damage value of weapon
-     */
+   public int getWeight() {
+      return weight;
+   }
 
-    public int getDamage() {
-        return damage;
-    }
+   public int getRange() {
+      return range;
+   }
 
-    /**
-     * Returns the current ammunition count of the weapon.
-     * @return the ammo count
-     */
+   public void setName(String name) {
+      this.name = name;
+   }
 
-    public int getAmmo() {
-        return ammo;
-    }
+   public void setDamage(int damage) {
+      this.damage = damage;
+   }
 
-    /**
-     * Returns the weapon weight.
-     * @return the weight of the weapon
-     */
+   public void setAmmo(int ammo) {
+      this.ammo = ammo;
+   }
 
-    public int getWeight() {
-        return weight;
-    }
+   public void setWeight(int weight) {
+      this.weight = weight;
+   }
 
-    /**
-     * Returns the range of the weapon.
-     * @return the weapon range
-     */
-
-    public int getRange() {
-        return range;
-    }
-
-    /**
-     * Sets the weapon name.
-     * @param name the new name of the weapon
-     */
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Sets the weapon damage.
-     * @param damage the new damage value
-     */
-
-    public void setDamage(int damage) {
-        this.damage = damage;
-    }
-
-    /**
-     * Sets the amount of ammo for the weapon.
-     * @param ammo the new ammo count
-     */
-
-    public void setAmmo(int ammo) {
-        this.ammo = ammo;
-    }
-
-    /**
-     * Sets the weapon weight.
-     * @param weight the new weight value
-     */
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
-    /**
-     * Sets the effective range of the weapon.
-     * @param range the new range value
-     */
-
-    public void setRange(int range) {
-        this.range = range;
-    }
+   public void setRange(int range) {
+      this.range = range;
+   }
 }
