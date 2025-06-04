@@ -21,7 +21,7 @@ public class Main {
      * The main game loop that manages the overall structure and flow of the game.
      * Character instantiation
      * Setup steps (name, weapon, and item selection)
-     * Repeating player actions until game over
+     * Repeating player actions until Game over
      * Game over messages and replay options
      * @param args Command-line arguments (not used).
      */
