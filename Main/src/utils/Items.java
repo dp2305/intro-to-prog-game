@@ -3,46 +3,27 @@ import java.util.Scanner;
 import static utils.Formatting.*;
 
 /**
- * Item class gives the player the ability to use an item, such as healing supplies or ammunition.
- * Each item has a name, value, weight, and type.
- * Items include Ammunition and Healing items such as First Aid Kit and Food Pack
- * F5AC Group 2 - [Aditya, Dutt, Angus]
+ * The {@code Items} class is used to create an item object.
+ * Each item has a unique name, value, weight, and type.
+ * Each item serves a different purpose, such as healing, providing ammo, or items needed for the story.
  */
-
 public class Items {
 
-
-   /** Scanner for user input when selecting items */
    private static final Scanner sc = new Scanner(System.in);
 
    // Fields to store item details
-
-   /** Name of the item */
    private String name;
-   /**
-    * Functional value of the item:
-    *   Healing item: amount of HP it restores
-    *   Ammunition: number of bullets it adds
-    *   Story item: encoded story information
-    */
-   private int value;
-   /** Weight of the item, which may affect carrying capacity */
+   private int value; // Value is what the item provides, eg. for ammo, it is the number of bullets, for healing items, it is the amount of health it heals
    private int weight;
-   /**
-    * Type of the item:
-    * 0 = Healing
-    * 1 = Ammo
-    * 2 = Story item
-    */
    private int type; // Type is the type of item, eg. healing (0), ammo (1), story (2)
 
    /**
-    * Constructor to initialize an item with the given name, value, weight, and type.
+    * Constructs a new {@code Items} object with the specified attributes.
     *
-    * @param name  Name of the item
-    * @param value Functional value (e.g., HP restored, bullets added)
-    * @param weight Weight of the item
-    * @param type Type of the item (0 = healing, 1 = ammo, 2 = story)
+    * @param name  The name of the item
+    * @param value The functional value of the item (e.g. HP restored or ammo added)
+    * @param weight The weight of the item
+    * @param type  The type of item, where 0 is healing, 1 is ammo, and 2 is story-related
     */
    public Items(String name, int value, int weight, int type) {
       this.name = name;
@@ -52,18 +33,25 @@ public class Items {
    }
 
    /**
-    * Allows the player to use an item from their backpack.
-    * Healing items restore health (up to a max of 55)
-    * Ammo items add bullets to the current weapon
-    * Story items can only be used outside of combat and display lore text
-    * If the player attempts to use an item that is invalid or not usable at the moment, a message is shown.
-    * @param player The player attempting to use the item
+    * Constructs a new {@code Items} object for story items with a specific name.
+    *
+    * @param name The name of the item
     */
+    public Items(String name) {
+      this.name = name;
+      this.type = 2;
+   }
 
+   /**
+    * Allows the player to use an item from their backpack
+    * Once an item is used, it is removed from the player's backpack.
+    *
+    * @param player The player that is using the item
+    */
    public static void useItem(Player player) {
       boolean isValidChoice = true;
       Weapon weapon = player.getWeapon();
-      int backpackSize = player.displayBackpackContents().split("\n").length;
+      int backpackSize = player.getBackpackSize();
 
       // If the player has no items in their backpack, print a message and exit the method
       if (player.displayBackpackContents().isEmpty()) {
@@ -71,52 +59,52 @@ public class Items {
          lineBreak();
          isValidChoice = false;
       } else {
-         print("What item would you like to use? \n" + ANSI_TEXT_BLUE + "(0) Go Back \n" + player.displayBackpackContents() + ANSI_RESET);
+         print("What item would you like to use? \n" + colour(BLUE, "(0) Go Back \n") + player.displayBackpackContents());
       }
 
       while (isValidChoice) {
-         printColour(" > ", ANSI_TEXT_GREEN);
+         print(GREEN, " > ");
          String itemChoice = sc.nextLine();
 
          if (itemChoice.isEmpty()) {
             clearLine(1);
          } else {
-            int itemIndex = -1;
+            int itemChoiceInt;
 
-            // Try to parse input character as number
             try {
-               itemIndex = Character.getNumericValue(itemChoice.charAt(0));
+               itemChoiceInt = Integer.parseInt(itemChoice);
             } catch (NumberFormatException e) {
+               itemChoiceInt = -1;
                clearLine(1);
             }
 
-            if (itemIndex == 0) {
+            if (itemChoiceInt == 0) {
                // User chose to go back
                isValidChoice = false;
-            } else if (itemIndex > 0 && itemIndex <= backpackSize) {
+            } else if (itemChoiceInt > 0 && itemChoiceInt <= backpackSize) {
                // Valid item index
                try {
-                  Items item = player.getBackpackItem(itemIndex - 1);
+                  Items item = player.getBackpackItem(itemChoiceInt - 1);
 
                   switch (item.getType()) {
                      case 0 -> {
-                        // If player will over heal from item, don't allow healing
-                        if (player.getHealth() + item.getValue() > 55) {
-                              clearLine(backpackSize + 3);
-                              print("You can't use the " + ANSI_TEXT_YELLOW + item.getName() + ANSI_RESET + " yet.");
-                              lineBreak();
-                              lineBreak();
-                              useItem(player);
+                        // If player will over-heal from item, don't allow healing
+                        if (player.getHealth() + item.getValue() > 90) {
+                           clearLine(backpackSize + 3);
+                           print("You can't use the " + colour(YELLOW, item.getName()) + " yet.");
+                           lineBreak();
+                           lineBreak();
+                           useItem(player);
                         } else {
-                              player.setHealth(player.getHealth() + item.getValue());
-                              print("You used the " + ANSI_TEXT_YELLOW + item.getName() + ANSI_RESET + " and recovered " + ANSI_TEXT_YELLOW + item.getValue() + " health" + ANSI_RESET + ".");
-                              // Remove the item after using it
-                              player.removeBackpackItem(item);
+                           player.setHealth(player.getHealth() + item.getValue());
+                           print("You used the " + colour(YELLOW, item.getName()) + " and recovered " + colour(YELLOW, item.getValue() + " health") + ".");
+                           // Remove the item after using it
+                           player.removeBackpackItem(item);
                         }
                      }
                      case 1 -> {
                         weapon.setAmmo(weapon.getAmmo() + item.getValue());
-                        print("You used the " + ANSI_TEXT_YELLOW + item.getName() + ANSI_RESET + " and added " + ANSI_TEXT_YELLOW + item.getValue() + " ammo to your " + weapon.getName() + ANSI_RESET + ".");
+                        print("You used the " + colour(YELLOW, item.getName()) + " and added " + colour(YELLOW, item.getValue() + " ammo") + " to your " + colour(YELLOW, weapon.getName()) + ".");
                         // Remove the item after using it
                         player.removeBackpackItem(item);
                      }
@@ -128,7 +116,7 @@ public class Items {
                            useItem(player);
                            return;
                         } else {
-                           print("This " + ANSI_TEXT_YELLOW + "fragment" + ANSI_RESET + " says " + ANSI_TEXT_YELLOW + item.getValue() + ANSI_RESET + " on it.");
+                           print("The core seems to be glowing green, I probably shouldn't mess with it right now.");
                         }
                      }
                      default -> {
@@ -148,62 +136,34 @@ public class Items {
       }
    }
 
-   /**
-    * @return Item name
-    */
    public String getName() {
       return name;
    }
 
-   /**
-    * @return Item value (HP restored, bullets added, etc.)
-    */
    public int getValue() {
       return value;
    }
 
-   /**
-    * @return Item weight
-    */
    public int getWeight() {
       return weight;
    }
 
-   /**
-    * @return Item type of the item (0 = healing, 1 = ammo, 2 = story)
-    */
    public int getType() {
       return type;
    }
 
-   /**
-    * Sets the item name.
-    * @param name New item name
-    */
    public void setName(String name) {
       this.name = name;
    }
 
-   /**
-    * Sets the item value.
-    * @param value New item value
-    */
    public void setValue(int value) {
     this.value = value;
    }
 
-   /**
-    * Sets the item weight.
-    * @param weight New item weight
-    */
    public void setWeight(int weight) {
       this.weight = weight;
    }
 
-   /**
-    * Sets the item type.
-    * @param type New item type (0 = healing, 1 = ammo, 2 = story)
-    */
    public void setType(int type) {
       this.type = type;
    }
